@@ -1,0 +1,8 @@
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root{
+    box-shadow: none !important;
+}
+@media only screen and (max-width: 768px) {
+    .egg {
+      height: 70px !important; /* Adjust the height as needed */
+    }
+  }

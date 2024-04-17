@@ -1,0 +1,99 @@
+.pricing {
+  text-decoration: none ;
+  background-color: transparent;
+  border: none;
+  padding: 5px 0px;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  background: #393bc5;  
+}
+
+.pricing:hover::before {
+  transform: scaleX(1);
+}
+
+.drawer-links{
+
+  margin-left: 30px;
+  display: flex;
+  flex-direction: row;
+  padding-top: 2px;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.drawer-btn{
+  display: flex;
+  margin: 20px;
+}
+
+
+@media screen and (max-width: 800px) and (min-width: 601px) {
+  /* .pricing{
+    font-size: 12px;
+  } */
+}
+
+
+@media only screen and (max-width: 600px) {
+  
+  .divput{
+         margin-top: 50% !important;
+         height: 50vh !important;
+         padding-left: 10px !important;
+         padding-right: 10px !important;
+  }  
+
+  .drawer{
+    display: none;
+  }
+  .ty1{
+    font-size: 2rem !important;
+  }
+  .ty{
+    font-size: 18px !important;
+  }
+  .Query{
+    height: auto;
+  }
+  .pop1{
+    width: 82vw !important;
+    height: 79vh !important;
+  }
+
+  .pricing{
+    margin-top: 10px;
+  }
+
+  
+
+  .drawer-links{
+
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    
+  }
+  .drawer-btn{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+  }
+  
+}

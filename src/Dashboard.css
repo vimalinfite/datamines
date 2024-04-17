@@ -1,0 +1,23 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+@media only screen and (max-width: 768px) {
+    .egg {
+      height: 70px !important; /* Adjust the height as needed */
+    }
+    .bnt{
+      width: 300px !important;
+    }
+  }
+  /* styles.css */
+  .aax:hover {
+    box-shadow: 5px 5px 5px 0px rgba(57, 59, 197, 0.25);
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(57, 59, 197, 0.25);
+    -moz-box-shadow: 5px 5px 5px 0px rgba(57, 59, 197, 0.25);
+  }
+  #boxbtn:hover{
+    box-shadow: 5px 5px 5px 0px rgba(57, 59, 197, 0.25);
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(57, 59, 197, 0.25);
+    -moz-box-shadow: 5px 5px 5px 0px rgba(57, 59, 197, 0.25);
+  }

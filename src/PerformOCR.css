@@ -1,0 +1,26 @@
+@media only screen and (max-width: 768px) {
+  /* For mobile devices */
+  .egg {
+    height: 50px !important; /* Adjust the height as needed */
+  }
+  .mobileSelect {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .mobileButton {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  /* For desktops */
+  .egg {
+    height: 70px !important; /* Adjust the height as needed */
+  }
+  .desktopSelect {
+    margin-right: 10px;
+  }
+  .desktopButton {
+    margin-left: 10px;
+  }
+}
