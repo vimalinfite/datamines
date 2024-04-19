@@ -42,7 +42,7 @@ const AdminProfile = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`https://3.109.181.180/cardapi/v1/get_all_user?file_status=true`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?file_status=true`, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');

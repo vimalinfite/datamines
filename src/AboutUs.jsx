@@ -110,7 +110,7 @@ const AboutUs = (props) => {
       redirect: "follow"
     };
 
-    fetch("https://3.109.181.180/cardapi/v1/data_store", requestOptions)
+    fetch("http://139.59.58.53:2424/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

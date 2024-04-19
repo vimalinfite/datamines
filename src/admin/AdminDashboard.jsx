@@ -62,7 +62,7 @@ const Dashboard = () => {
         body: JSON.stringify({ user_id: uidFromPerformOCR }),
       };
 
-      const response = await fetch(`https://3.109.181.180/cardapi/v1/get_user_files?user_id=${uidFromPerformOCR}&file_status=true`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_user_files?user_id=${uidFromPerformOCR}&file_status=true`, requestOptions);
       const data = await response.json();
       setFolders(data.data.files_data);
     } catch (error) {
@@ -82,7 +82,7 @@ const Dashboard = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`https://3.109.181.180/cardapi/v1/get_all_user?user_id=${uidFromPerformOCR}`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${uidFromPerformOCR}`, requestOptions);
       const data = await response.json();
 
       const userStatus = data?.data?.user_data?.[0]?.status;
@@ -122,7 +122,7 @@ const Dashboard = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`https://3.109.181.180/cardapi/v1/delete_file?user_id=${uidFromPerformOCR}&file_id=${deleteFolder}&type=delete`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/delete_file?user_id=${uidFromPerformOCR}&file_id=${deleteFolder}&type=delete`, requestOptions);
       if (response.ok) {
         setFolders(prevFolders => prevFolders.filter(folder => folder.record_id !== deleteFolder));
         setDeleteFolder(null);

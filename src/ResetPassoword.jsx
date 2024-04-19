@@ -51,7 +51,7 @@ const ResetPassword = () => {
             formdata.append("password", newPassword);
             formdata.append("confirm_password", confirmPassword);
 
-            const response = await axios.post(`https://3.109.181.180/cardapi/v1/reset_password?uuid=${email}`,
+            const response = await axios.post(`http://139.59.58.53:2424/cardapi/v1/reset_password?uuid=${email}`,
                 formdata
             );
 

@@ -374,7 +374,7 @@ const AdminPerformOCR = () => {
         data1.append('attachment_file', file.file);
       });
 
-      const response = await axios.post('https://3.109.181.180/cardapi/v1/get_text_extract', data1, axiosConfig,{ timeout: 500000 });
+      const response = await axios.post('http://139.59.58.53:2424/cardapi/v1/get_text_extract', data1, axiosConfig,{ timeout: 500000 });
       console.log("=================>", response.data.data.output_data);
       const extractedData = response.data.data.output_data.map(item => ({ ...item, file: item.filename }));
       setDataa([...dataa, extractedData]);
@@ -446,7 +446,7 @@ const AdminPerformOCR = () => {
         redirect: "follow"
       };
 
-      const response = await fetch("https://3.109.181.180/cardapi/v1/file_store", requestOptions);
+      const response = await fetch("http://139.59.58.53:2424/cardapi/v1/file_store", requestOptions);
       const result = await response.text();
       console.log("////////555555555555555555///////", result);
     } catch (error) {
@@ -490,7 +490,7 @@ const AdminPerformOCR = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`https://3.109.181.180/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
 
       const username = data?.data?.user_data?.[0]?.username;
