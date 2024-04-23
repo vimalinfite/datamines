@@ -359,7 +359,7 @@ const Dashboard = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
               <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
             </Typography>
-            <Typography variant="body1" style={{ color: 'white', marginRight: '10px' }}>Credits: {credits}</Typography>
+            
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello, {username}</Typography>
@@ -378,14 +378,17 @@ const Dashboard = () => {
           style={{ marginBottom: '20px', width: '300px' }}
         />
         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
-          <Button variant="contained" style={{ backgroundColor: '#393bc5', color: 'white', marginRight: '10px' }} onClick={handleSearch}>
-            Search
-          </Button>
-          {searchInput && <Button variant="contained" onClick={() => {
-            setSearchInput(''),
-          setSearchData(false)}} style={{ backgroundColor: '#ff0000', color: 'white', marginRight: '10px' }}>
-            Clear
-          </Button>}</div>
+  <Button variant="contained" style={{ backgroundColor: '#393bc5', color: 'white', marginRight: '10px' }} onClick={handleSearch}>
+    Search
+  </Button>
+  {searchInput && <Button variant="contained" onClick={() => {
+    setSearchInput('');
+    setSearchData(false);
+  }} style={{ backgroundColor: '#ff0000', color: 'white' }}>
+    Clear
+  </Button>}
+</div>
+
           </div>
           <br />
         {renderContent()}

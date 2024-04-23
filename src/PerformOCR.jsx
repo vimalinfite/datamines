@@ -2,6 +2,7 @@
 import axios from 'axios';
 import wait from '../src/image/karzio.mp4'
 import { useEffect, useState } from 'react';
+import avtar from './image/Avtar.png';
 import { useDropzone } from 'react-dropzone';
 import { Button, Select, MenuItem, Tooltip } from '@mui/material';
 import { AppBar, Toolbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Checkbox, FormControl } from '@mui/material';
@@ -603,7 +604,7 @@ const PerformOCR = () => {
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello, {username}</Typography>
-            <img src={Avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
+            <img src={avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
           </div>
         </Toolbar>
       </AppBar>
