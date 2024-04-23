@@ -28,7 +28,8 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import karzio from '../src/image/karzio.mp4'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
 
 const Pricing = (props) => {
   const [selectedClass, setSelectedClass] = useState('');
@@ -394,7 +395,7 @@ const Pricing = (props) => {
                 <a href="https://facebook.com/profile.php?id=61555752627560" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
+                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
                 <a href="https://instagram.com/krazio_cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>

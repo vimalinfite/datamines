@@ -10,7 +10,9 @@ import excelIcon from './image/exl.png';
 import pdfIcon from './image/pdf.png';
 import { MdDelete } from 'react-icons/md';
 import flag from './image/flag.png'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook,  Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
+
 
 const Dashboard = () => {
   const [folders, setFolders] = useState([]);
@@ -64,7 +66,7 @@ const Dashboard = () => {
 
       const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_user_files?user_id=${uidFromPerformOCR}&file_status=true`, requestOptions);
       const data = await response.json();
-      setFolders(data.data.files_data);
+      setFolders(data.data.files_data.reverse());
     } catch (error) {
       console.error(error);
     }
@@ -301,13 +303,43 @@ const Dashboard = () => {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', margin: '20px', alignItems: 'center', justifyContent: 'center' }}>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <Button key={index} onClick={() => handlePageChange(index + 1)} variant={currentPage === index + 1 ? "contained" : "outlined"} style={{ backgroundColor: '#393bc5', color: '#fff' }}>
-                {index + 1}
-              </Button>
-            ))}
-          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+  <Button 
+    onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)} 
+    variant="outlined" 
+    style={{ marginRight: '10px', backgroundColor: '#393bc5', color: '#fff' }}
+  >
+    Prev
+  </Button>
+  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
+    {Array.from({ length: 3 }, (_, index) => {
+      const pageNumber = currentPage - 1 + index;
+      if (pageNumber > 0 && pageNumber <= totalPages) {
+        return (
+          <Button 
+            key={index} 
+            onClick={() => handlePageChange(pageNumber)} 
+            variant={currentPage === pageNumber ? "contained" : "outlined"} 
+            style={{ backgroundColor: '#393bc5', color: '#fff' }}
+          >
+            {pageNumber}
+          </Button>
+        );
+      } else {
+        return null;
+      }
+    })}
+  </div>
+  <Button 
+    onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)} 
+    variant="outlined" 
+    style={{ marginLeft: '10px', backgroundColor: '#393bc5', color: '#fff' }}
+  >
+    Next
+  </Button>
+</div>
+
+
         </div>
       );
     }
@@ -317,7 +349,7 @@ const Dashboard = () => {
   const firstIndex = lastIndex - itemsPerPage;
   const currentItems = folders.slice(firstIndex, lastIndex);
   const totalPages = Math.ceil(folders.length / itemsPerPage);
-
+  const credits = 100;
   return (
     <>
       <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
@@ -327,6 +359,7 @@ const Dashboard = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
               <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
             </Typography>
+            <Typography variant="body1" style={{ color: 'white', marginRight: '10px' }}>Credits: {credits}</Typography>
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello, {username}</Typography>
@@ -374,7 +407,7 @@ const Dashboard = () => {
       <Dialog open={deleteFolder !== null} onClose={handleCloseDialog}>
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Are you sure you want to delete this folder?</Typography>
+          <Typography variant="body1">Are you sure you want to delete the file? Once deleted, it cannot beretrieved.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
@@ -392,7 +425,7 @@ const Dashboard = () => {
               <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
             </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
+              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
             </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
               <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>

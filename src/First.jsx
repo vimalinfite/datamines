@@ -28,7 +28,11 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import karzio from '../src/image/karzio.mp4'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
+
+
+
 function First(props) {
   const [selectedClass, setSelectedClass] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -130,6 +134,7 @@ function First(props) {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
+  
 
   const open = Boolean(anchorEl);
   const id = open ? 'popover-demo' : undefined;
@@ -173,6 +178,8 @@ function First(props) {
     }
 
   ];
+
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -292,7 +299,7 @@ function First(props) {
               justifyContent: "center"
             }}
           >
-            <div class="drawer-links">
+            <div className="drawer-links">
               <Link className='pricing' to='/aboutus'>
                 <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
               </Link>
@@ -300,7 +307,7 @@ function First(props) {
                 <Typography variant="h6" style={{ color: 'black' }}>Pricing</Typography>
               </Link>
             </div>
-            <div class="drawer-btn">
+            <div className="drawer-btn">
               <Link to='/SignIn'>
                 <Button style={{ fontFamily: 'Inter, sans-serif', marginBottom: "20px", width: '200px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }} >
                   Get Started Free
@@ -574,7 +581,7 @@ function First(props) {
                 <a href="https://facebook.com/profile.php?id=61555752627560" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
+                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
                 <a href="https://instagram.com/krazio_cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>
@@ -583,7 +590,7 @@ function First(props) {
                 <a href="https://linkedin.com/company/krazio-cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><LinkedIn /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://kraziocloud.com" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Language /></a>
+                <a href="https://www.kraziocloud.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Language /></a>
               </Typography>
             </div>
             <div style={{ display: 'flex' }}>

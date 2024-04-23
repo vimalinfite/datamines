@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios';
-import wait from './image/wait.mp4';
+import wait from '../src/image/karzio.mp4'
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import CircularProgress from '@mui/material/CircularProgress';
 import { Button, Select, MenuItem, Tooltip } from '@mui/material';
-import { AppBar, Toolbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ButtonGroup, Typography, Checkbox, FormControl } from '@mui/material';
+import { AppBar, Toolbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Checkbox, FormControl } from '@mui/material';
 import logo1 from "./image/logo1.png";
 import { storage } from './firebase.config';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -13,7 +12,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Link, useNavigate } from 'react-router-dom';
 import "./PerformOCR.css"
 import loader2 from './image/loader2.gif';
-import Avtar from './image/Avtar.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -24,7 +22,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import jsPDF from 'jspdf';
-import ReactPlayer from 'react-player'
 import flag from './image/flag.png'
 import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
 
@@ -411,6 +408,7 @@ const PerformOCR = () => {
               setcsvUrl(downloadURL);
 
             });
+            toast.success('Data fetched successfully!')
             console.log('File uploaded successfully!');
 
           }
@@ -449,7 +447,7 @@ const PerformOCR = () => {
       };
 
       const response = await fetch("http://139.59.58.53:2424/cardapi/v1/file_store", requestOptions);
-      const result = await response.text();
+      const result = await response;
       console.log("////////555555555555555555///////", result);
     } catch (error) {
       console.error(error);
