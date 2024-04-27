@@ -1,0 +1,28 @@
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root{
+    box-shadow: none !important;
+}
+@media only screen and (max-width: 768px) {
+    .egg {
+      height: 70px !important; /* Adjust the height as needed */
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px !important;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background:#555;
+}
