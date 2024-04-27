@@ -464,7 +464,7 @@ const AdminPerformOCR = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`https://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
       // console.log("============>",data.data.user_data[0]);
       const CreditPoints = data?.data?.user_data?.[0]?.points;

@@ -50,7 +50,7 @@ const Dashboard = () => {
       };
 
       const response = await fetch(
-        `https://134.209.153.179/cardapi/v1/get_user_files?user_id=${uidFromPerformOCR}`,
+        `http://139.59.58.53:2424/cardapi/v1/get_user_files?user_id=${uidFromPerformOCR}`,
         requestOptions
       );
       const data = await response.json();
@@ -73,7 +73,7 @@ const Dashboard = () => {
       };
 
       const response = await fetch(
-        `https://134.209.153.179/cardapi/v1/get_all_user?user_id=${uidFromPerformOCR}`,
+        `http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${uidFromPerformOCR}`,
         requestOptions
       );
       const data = await response.json();
