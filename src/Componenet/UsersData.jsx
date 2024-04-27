@@ -66,7 +66,7 @@ const UsersData = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
 
       const username = data?.data?.user_data?.[0]?.username;
@@ -106,7 +106,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?file_status=true`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/get_all_user?file_status=true`, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -135,7 +135,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_user_files?user_id=${user.user_id}&file_status=true`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/get_user_files?user_id=${user.user_id}&file_status=true`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -162,7 +162,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=delete`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=delete`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -192,7 +192,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/user_activate?user_id=${userId}&status=activate`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/user_activate?user_id=${userId}&status=activate`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -220,7 +220,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/user_activate?user_id=${userId}&status=deactivate`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/user_activate?user_id=${userId}&status=deactivate`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

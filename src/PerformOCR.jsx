@@ -11,6 +11,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link, useNavigate } from 'react-router-dom';
 import "./PerformOCR.css"
+import loader2 from './image/loader2.gif';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -466,7 +467,7 @@ const PerformOCR = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`https://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
       // console.log("============>",data.data.user_data[0]);
       const CreditPoints = data?.data?.user_data?.[0]?.points;
