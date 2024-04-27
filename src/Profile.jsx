@@ -85,7 +85,7 @@ const Profile = () => {
   ];
 
   return (
-    <div>
+    <div  >
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <img src={loader} style={{ height: 100, width: 100 }} alt="" />
@@ -93,18 +93,20 @@ const Profile = () => {
       ) : (
 
         <div style={{ display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh' }}>
-          <div className='ph' style={{ width: '10vw', height: '100vh', backgroundColor: '#393BC5', alignItems: 'center', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-            <img className='egg' id='ede' src={logo1} style={{ height: '10vh', width: '5vw', paddingTop: '10px', paddingBottom: '10px' }} />
-            {companyName.map((item) => (
-              <div key={item} style={{ paddingTop: '10px' }}>
+
+          <div className='ph' style={{ width: '10vw', maxheight: '100vh', backgroundColor: '#393BC5', alignItems: 'center', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <Link to='/'>
+              <img className='egg' id='ede' src={logo1} style={{ height: '10vh', width: '5vw', paddingTop: '10px', paddingBottom: '10px' }} />
+            </Link>
+            {companyName.map((item, index) => (
+              <div key={index} style={{ paddingTop: '10px' }}>
                 <p className='ppps' style={{ fontSize: '3vw', fontWeight: 'bold', color: '#fff' }}>{item.letter.toUpperCase()}</p>
               </div>
             ))}
-
           </div>
           <div style={{ width: '80vw', height: '100vh', backgroundColor: '#fff' }}>
 
-            <CardContent sx={{ padding: '1.5rem' }}>
+            <CardContent sx={{ '&:last-child': { pb: 0 } }} >
               <Link to="/dashboard">
                 <ArrowBackIcon style={{ marginBottom: '10px', color: '#393BC5' }} />
               </Link>
@@ -113,38 +115,42 @@ const Profile = () => {
               <Typography variant="h5" sx={{ width: '8rem', fontFamily: 'Arial, sans-serif', color: '#000', marginTop: '0.5rem', marginBottom: '0.5rem', textAlign: 'center' }}>
                 {userData[0]?.username}
               </Typography>
-              <div class="container">
-                <div class="item">
+              <div className="container">
+                <div className="item">
                   <p>Linked Account</p>
                   <p>{userData[0].email}</p>
                 </div>
-                <div class="item">
+                <div className="item">
                   <p>Contact No.</p>
                   <p>{userData[0].contact_no}</p>
                 </div>
-                <div class="item">
+                <div className="item">
                   <p>Country</p>
                   <p>{userData[0].country}</p>
                 </div>
-                <div class="item">
+                <div className="item">
                   <p>State</p>
                   <p>{userData[0].state}</p>
                 </div>
-                <div class="item">
+                <div className="item">
                   <p>City</p>
                   <p>{userData[0].city}</p>
                 </div>
-                <div class="item">
+                <div className="item">
                   <p>Pincode</p>
                   <p>{userData[0].pincode}</p>
                 </div>
-                <div class="item">
+                <div className="item">
                   <p>File Generated</p>
                   <p>{userData[0].count}</p>
                 </div>
+                <div className="item">
+                  <p>Credit Points</p>
+                  <p>{userData[0].points}</p>
+                </div>
               </div>
 
-              <div style={{ margin:'20px' }}>
+              <div>
                 <Button onClick={handleLogout} style={{}} variant="contained" sx={{ backgroundColor: '#393bc5', color: '#fff', fontWeight: 'bold', '&:hover': { backgroundColor: '#d32f2f' } }}>
                   Logout
                 </Button>

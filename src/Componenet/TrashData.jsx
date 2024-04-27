@@ -4,7 +4,7 @@ import { Close as CloseIcon } from '@mui/icons-material';
 import logo1 from "../image/logo1.png";
 import DownloadIcon from '@mui/icons-material/Download';
 import "./TrashData.css"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avtar from '../image/Avtar.png';
 
@@ -16,14 +16,14 @@ const TrashData = () => {
   const [userFiles, setUserFiles] = useState([]);
   const [recoverData, setRecoverData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(100);
+  const [itemsPerPage] = useState(5);
   const [sortOrder, setSortOrder] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [searchdata, setSearchData] = useState(false);
   const [filterdata, setFilteredData] = useState([])
   const [username, setUsername] = useState('');
 
-
+  const navigate = useNavigate();
   const handleSortStatus = () => {
     setSortOrder(sortOrder === 'activate' ? 'deactivate' : 'activate');
     setUserData((prevUserData) => [...prevUserData].sort((a, b) => {
@@ -185,17 +185,19 @@ const TrashData = () => {
   const open = Boolean(anchorEl);
 
   return (
-    <div style={{ width: '100vw', overflow: 'hidden', fontFamily: "'Inter var', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'" }}>
+    <div style={{  fontFamily: "'Inter var', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'" }}>
       <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
         <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10 }}>
+        <Link to ='/' style={{textDecoration:'none'}}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
             <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
               <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
               </Typography>
             </div>
+            </Link>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello, {username}</Typography>
+            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello,  {username.length > 5 ? username.slice(0, 5) + '...' : username}</Typography>
             <img src={Avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
           </div>
         </Toolbar>
@@ -284,7 +286,7 @@ const TrashData = () => {
         </div>
       </div>
 
-      <TableContainer style={{ padding: 10 }} component={Paper}>
+      <TableContainer style={{ paddingTop: 10}} component={Paper} >
         <Table size="small" aria-label="a dense table" style={{ borderCollapse: 'collapse' }}>
           <TableHead style={{ backgroundColor: '#D3D3D3' }}>
             <TableRow>
@@ -348,7 +350,7 @@ const TrashData = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {filterdata.length < 101 || userData.length < 101 ? <></> :
+     
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Pagination
             count={searchdata ? Math.ceil(filterdata.length / itemsPerPage) : Math.ceil(userData.length / itemsPerPage)}
@@ -356,9 +358,9 @@ const TrashData = () => {
             onChange={handleChangePage}
             variant="outlined"
             shape="rounded"
-            style={{ marginTop: 10, justifyContent: 'center' }}
+            style={{ marginTop: 10, justifyContent: 'center', marginBottom: 10 }}
           />
-        </div>}
+        </div>
     </div>
   );
 }

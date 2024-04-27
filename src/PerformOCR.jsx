@@ -1,19 +1,16 @@
-/* eslint-disable no-unused-vars */
 import axios from 'axios';
-import wait from './image/wait.mp4';
+import wait from './image/karzio.mp4'
 import { useEffect, useState } from 'react';
+import avtar from './image/Avtar.png';
 import { useDropzone } from 'react-dropzone';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Button, Select, MenuItem, Tooltip } from '@mui/material';
-import { AppBar, Toolbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ButtonGroup, Typography, Checkbox, FormControl } from '@mui/material';
+import { Button, Select, MenuItem, Tooltip, useMediaQuery } from '@mui/material';
+import { AppBar, Toolbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Checkbox, FormControl } from '@mui/material';
 import logo1 from "./image/logo1.png";
 import { storage } from './firebase.config';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link, useNavigate } from 'react-router-dom';
 import "./PerformOCR.css"
-import loader2 from './image/loader2.gif';
-import Avtar from './image/Avtar.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -24,12 +21,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import jsPDF from 'jspdf';
-import ReactPlayer from 'react-player'
 import flag from './image/flag.png'
 import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
-
-
-
+import CircularProgressBar from './Componenet/CircularProgressBar';
 
 const DeselectConfirmationDialog = ({ open, onClose, onConfirm }) => {
   return (
@@ -136,8 +130,8 @@ const PerformOCR = () => {
   const [selectedFileName, setSelectedFileName] = useState('');
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [username, setUsername] = useState('');
-
-
+  const [creditPoints, setCreditPoints] = useState('');
+  
   const TokenId = localStorage.getItem('token')
   const navigate = useNavigate();
   const userType = localStorage.getItem('type');
@@ -153,11 +147,11 @@ const PerformOCR = () => {
   }, [isLoading]);
 
   useEffect(() => {
+    console.log("========  2222222222    =============",pdfUrl,csvurl);
     if (pdfUrl && csvurl) {
-      // Both pdfUrl and csvurl are set, you can perform your action here
       storeFile(pdfUrl, csvurl);
     }
-  }, [csvurl]);
+  }, [csvurl,pdfUrl]);
   useEffect(() => {
     fetchUser()
   }, []);
@@ -188,54 +182,49 @@ const PerformOCR = () => {
   };
   const convertToPDF = (data, type) => {
     const pdf = new jsPDF();
-
-    // Set up list headers
-    pdf.text('Important Files:', 10, 10);
-
-    let y = 20; // Start position for items
-
+    
+    let y = 10; // Start position for items
+    let currentPage = 1;
+    const maxPageHeight = 250; // Adjust as needed
+  
     data.forEach((dataItems) => {
       dataItems.forEach((item) => {
         const markedAsImportant = importantFiles.has(item.file) ? 'Yes' : 'No';
         const listItem = `Important: ${markedAsImportant}\n`;
-        pdf.text(listItem, 10, y);
-
         const companyNames = `  Company Names: ${item.company_names.join(', ')}\n`;
-        pdf.text(companyNames, 10, y + 10);
-
         const contactNumbers = `  Contact Numbers: ${item.contact_numbers.join(', ')}\n`;
-        pdf.text(contactNumbers, 10, y + 20);
-
         const designations = `  Designations: ${item.designations.join(', ')}\n`;
-        pdf.text(designations, 10, y + 30);
-
         const emailAddresses = `  Email Addresses: ${item.email_addresses.join(', ')}\n`;
-        pdf.text(emailAddresses, 10, y + 40);
-
         const locations = `  Locations: ${item.locations}\n`;
-        pdf.text(locations, 10, y + 50);
-
         const personNames = `  Person Names: ${item.person_names.join(', ')}\n`;
-        pdf.text(personNames, 10, y + 60);
-
         const services = `  Services: ${item.services.join(', ')}\n`;
-        pdf.text(services, 10, y + 70);
-
         const websiteURLs = `  Website URLs: ${item.website_urls.join(', ')}\n`;
-        pdf.text(websiteURLs, 10, y + 80);
-
-        y += 100; // Move to next item
+  
+        const contentArray = [listItem, companyNames, contactNumbers, designations, emailAddresses, locations, personNames, services, websiteURLs];
+        const contentHeight = contentArray.length * 10;
+  
+        // Check if content exceeds the page height
+        if (y + contentHeight > maxPageHeight) {
+          pdf.addPage(); // Add new page
+          currentPage++; // Increment page count
+          y = 10; // Reset y position
+        }
+  
+        // Add content to the PDF
+        contentArray.forEach((content, index) => {
+          pdf.text(content, 10, y + index * 10);
+        });
+  
+        y += contentHeight + 10; // Move to next item
       });
     });
-
-    console.log("asdasd", type == "download");
+  
     if (type == "download") {
       // Save PDF
       pdf.save(`${downloadFileName}.pdf`)
     } else {
-
       const pdfBlob = pdf.output('blob');
-      const storageRef = ref(storage, `files/${downloadFileName}.pdf `);// Also update the file name for Firebase storage
+      const storageRef = ref(storage, `files/${downloadFileName}.pdf`); // Also update the file name for Firebase storage
       const uploadTask = uploadBytesResumable(storageRef, pdfBlob);
       uploadTask.on('state_changed',
         (snapshot) => {
@@ -249,18 +238,13 @@ const PerformOCR = () => {
         () => {
           // Upload complete
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("dddddddd", downloadURL);
+            console.log("Download URL:", downloadURL);
             setpdfUrl(downloadURL);
-
           });
           console.log('Pdf File uploaded successfully!');
-
         }
       );
-
-
     }
-
   };
 
   const handleConfirmDeselect = () => {
@@ -284,8 +268,6 @@ const PerformOCR = () => {
     setUploadedFiles(updatedFiles);
     setDeleteDialogOpen2(false);
   };
-
-
   const showToast = (message) => {
     setToastMessage(message);
     toast.warning(message);
@@ -320,7 +302,6 @@ const PerformOCR = () => {
   };
 
   const handleCloseDeselectDialog = () => {
-    // Close the deselect confirmation dialog
     setDeselectDialogOpen(false);
   };
 
@@ -341,28 +322,23 @@ const PerformOCR = () => {
   const handleHover = (e) => {
     e.target.style.boxShadow = '0px 6px 12px rgba(57, 59, 197, 0.3)'; // Change box shadow on hover
   };
-
   const handleLeave = (e) => {
     e.target.style.boxShadow = '0px 4px 8px rgba(57, 59, 197, 0.1)'; // Reset box shadow on leave
   };
-
   const handleInputChange = (event) => {
     setDownloadFileName(event.target.value);
   };
-
   const handleDelete = (fileName) => {
     const updatedFiles = uploadedFiles.filter(file => file.name !== fileName);
     setUploadedFiles(updatedFiles);
   };
-
-
   const fetchData = async () => {
+    if(uploadedFiles.length <= creditPoints){
     if (!downloadFileName.trim()) { // Check if file name is empty or contains only whitespace
       showToast('Please enter a file name.');
       return;
     }
     setIsLoading(true);
-
     try {
       const axiosConfig = {
         headers: {
@@ -370,29 +346,25 @@ const PerformOCR = () => {
           'Content-Type': 'multipart/form-data'
         }
       };
-
       const data1 = new FormData();
       uploadedFiles.forEach(file => {
         data1.append('attachment_file', file.file);
       });
-
-      const response = await axios.post('http://139.59.58.53:2424/cardapi/v1/get_text_extract', data1, axiosConfig, { timeout: 500000 });
+      const userId = localStorage.getItem('uid')
+      console.log("========= userID   =======",userId);
+      const response = await axios.post(`http://139.59.58.53:2424/cardapi/v1/get_text_extract?user_id=${userId}`, data1, axiosConfig, { timeout: 500000 });
       console.log("=================>", response.data.data.output_data);
       const extractedData = response.data.data.output_data.map(item => ({ ...item, file: item.filename }));
       setDataa([...dataa, extractedData]);
-
       setIsDataReady(true);
       console.log("response.data.data.output_data >", extractedData);
       if (response.data.data.output_data.length > 0) {
         await convertToPDF([extractedData], "upload");
-
         const csvContent = await convertToCSV();
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-
-
         const storageRef = ref(storage, `files/${downloadFileName}.csv`); // Also update the file name for Firebase storage
         const uploadTask = uploadBytesResumable(storageRef, blob);
         uploadTask.on('state_changed',
@@ -411,18 +383,19 @@ const PerformOCR = () => {
               setcsvUrl(downloadURL);
 
             });
+            toast.success('Data fetched successfully!')
             console.log('File uploaded successfully!');
-
           }
-
         );
-
       }
     } catch (error) {
       console.error('Error uploading file and getting response:', error);
     }
 
     setIsLoading(false);
+  }else{
+   toast.error('insufficient credit Points')
+  }
   };
 
   const storeFile = async (pdf, csv) => {
@@ -448,8 +421,9 @@ const PerformOCR = () => {
         redirect: "follow"
       };
 
-      const response = await fetch("http://139.59.58.53:2424/cardapi/v1/file_store", requestOptions);
-      const result = await response.text();
+       const response = 
+      await fetch("http://139.59.58.53:2424/cardapi/v1/file_store", requestOptions)
+      const result = await response;
       console.log("////////555555555555555555///////", result);
     } catch (error) {
       console.error(error);
@@ -494,18 +468,19 @@ const PerformOCR = () => {
 
       const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
-
+      // console.log("============>",data.data.user_data[0]);
+      const CreditPoints = data?.data?.user_data?.[0]?.points;
+      // console.log("===========Points====> ",CreditPoints);
       const username = data?.data?.user_data?.[0]?.username;
       setUsername(username);
+      setCreditPoints(CreditPoints);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Function to handle download action
   const handleDownload = () => {
     if (selectedOptions.length === 0) {
-      // No file selected
       return;
     }
     if (selectedOptions.includes('Excel') && selectedOptions.includes('PDF')) {
@@ -515,12 +490,9 @@ const PerformOCR = () => {
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', `${downloadFileName}.csv`); // Dynamically set the file name based on the input field
-
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
-
-
       const pdfContent = convertToPDF(dataa, "download");
 
     }
@@ -542,20 +514,6 @@ const PerformOCR = () => {
     }
   };
 
-  // const handleCheckboxToggle = (fileName, isChecked) => {
-  //   const updatedFiles = uploadedFiles.map(file =>
-  //     file.name === fileName ? { ...file, selected: isChecked } : file
-  //   );
-  //   setUploadedFiles(updatedFiles);
-
-  //   if (isChecked) {
-  //     setImportantFiles(prev => new Set([...prev, fileName]));
-  //   } else {
-  //     const updatedImportantFiles = new Set(importantFiles);
-  //     updatedImportantFiles.delete(fileName);
-  //     setImportantFiles(updatedImportantFiles);
-  //   }
-  // };
   const handleChange = (event) => {
     setSelectedOptions(event.target.value);
   };
@@ -593,28 +551,40 @@ const PerformOCR = () => {
     setDeleteDialogOpen(false);
   };
 
+  const isMobile = useMediaQuery('(max-width:600px)');
+
   return (
     <div>
       <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
         <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10 }}>
+        <Link to='/' style={{textDecoration:'none'}}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
-              <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
-            </Typography>
+            {!isMobile && (
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
+                  <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
+                </Typography>
+              )}
           </div>
+          </Link>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello, {username}</Typography>
-            <img src={Avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
+            <div style={{marginRight:'10px'}}>
+            <Typography onClick={handleProfileClick}>Hello, {username.length > 8 ? username.slice(0, 8) + '...' : username}</Typography>
+              <Typography >Credit Points : {creditPoints}</Typography>
+              </div>
+            <img src={avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
           </div>
         </Toolbar>
       </AppBar>
-
       <br />
+      <br />
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingLeft:5,paddingRight:5}}>
         <Link to="/dashboard">
           <ArrowBackIcon style={{ margin: '10px', color: '#393BC5' }} />
-        </Link>  <br />  <br />  <br />
-
+        </Link>
+        </div>
+        <br />
+       
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '5vh' }}>
           <ToastContainer />
           <input
@@ -737,7 +707,7 @@ const PerformOCR = () => {
             {isLoading && (
               <div style={{ marginBottom: '10vh' }}>
                 <p style={{ color: 'red', fontSize: '2rem', fontFamily: 'Inter, sans-serif', marginTop: '20px' }}>Do not refresh the page (it may take long time)</p>
-                <p style={{ color: 'black', fontSize: '1.3rem', fontFamily: 'Inter, sans-serif' }}>Watch a award-winning film while we work on your results. Thanks for being patience.</p>
+                {/* <p style={{ color: 'black', fontSize: '1.3rem', fontFamily: 'Inter, sans-serif' }}>Watch a award-winning film while we work on your results. Thanks for being patience.</p> */}
               </div>
             )}
           </div>
@@ -826,7 +796,7 @@ const PerformOCR = () => {
         <div style={{ paddingBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-              <a href="https://facebook.com/profile.php?id=61555752627560" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
+              <a href="https://www.facebook.com/kraziocloud?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
             </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
               <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
@@ -852,6 +822,4 @@ const PerformOCR = () => {
     </div>
   );
 };
-
-
 export default PerformOCR;

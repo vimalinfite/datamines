@@ -4,7 +4,8 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { Typography, Button, Grid, TextField, Popover, IconButton } from '@mui/material';
 import './FIrst.css';
-import download from './image/download.png'
+import download1 from './image/download1.png'
+import download2 from './image/download2.png'
 import { KeyboardArrowUp, KeyboardArrowDown, Close } from '@mui/icons-material';
 import flag from './image/flag.png'
 import { Link } from 'react-router-dom'
@@ -28,11 +29,29 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import karzio from '../src/image/karzio.mp4'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
+
+
+
 function First(props) {
   const [selectedClass, setSelectedClass] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [isExpanded, setIsExpanded] = useState({});
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = [download1, download2]; // Array of image paths
+  const isSmallScreen2 = false; // You can define this based on your requirement
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // Incrementing the current image index
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // Change image every 5 seconds (5000 milliseconds)
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(intervalId);
+  }, [images.length]);
+
   const handleMouseEnter = (className) => {
     setSelectedClass(className);
     setIsExpanded((prevState) => ({
@@ -63,57 +82,63 @@ function First(props) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
   const submitdemo = () => {
+    // Check if any required field is empty
+    if (!formData.username || !formData.email || !formData.phone) {
+      toast.error('Please fill all required fields.');
+      return; // Exit the function if any field is empty
+    }
+  
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${TokenId}`);
-
+  
     const formdata = new FormData();
     formdata.append("username", formData.username);
     formdata.append("email", formData.email);
     formdata.append("phone", formData.phone);
     formdata.append("company_name", formData.company_name);
-
+  
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formdata,
       redirect: "follow"
     };
-
+  
     fetch("http://139.59.58.53:2424/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        // Reset form data
+        setFormData({
+          username: '',
+          email: '',
+          phone: '',
+          company_name: ''
+        });
         return response.text();
       })
       .then((result) => {
-        // Check if the result contains a message indicating email exists
-        if (result.includes("Email already exits...")) {
-          toast.warn('Email already exits...');
+        if (result.includes("Email already exists...")) {
+          toast.warn('Email already exists...');
         } else {
-          // Show success toast if email does not exist
           toast.success('Thank you for visiting. Our team will reach you soon.');
-          console.log("============== sent succes  ==============>", result);
+          console.log("============== sent success ==============>", result);
         }
       })
       .catch((error) => {
         console.error(error);
-        // Show error toast if needed
       });
   };
+  
 
-
-  const imageSources = {
-    class1: download,
-    class2: download,
-    class3: download,
-    class4: download,
-    class5: download,
-  };
   const classContent = {
     "How many cards can I upload at once ?": 'You can upload up to 50 cards in one go',
     "What type of cards can I upload ?": 'You can upload various types of cards, including business cards, ID cards, and membership cards',
@@ -208,7 +233,7 @@ function First(props) {
               Get Started Free
             </Button>
             <Button onClick={handlePopoverOpen} style={{ marginLeft: '20px', fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-              Request a Demo
+              Request A Demo
             </Button>
           </ListItem>
         ))}
@@ -226,7 +251,6 @@ function First(props) {
         <CssBaseline />
         <AppBar component="nav" style={{ background: 'white', color: "black", justifyContent: 'center' }}>
           <Toolbar>
-
             <Typography
               variant="h6"
               component="div"
@@ -234,11 +258,10 @@ function First(props) {
             >
               {/* MUI */}
               <Link to="/" style={{ textDecoration: 'none' }}>
-
                 <img className="egg" src={logo} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} alt="Logo" />
               </Link>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', marginLeft: '10px' }}>
-                <span style={{ flexGrow: 1, color: '#000', marginLeft: '10px', fontWeight: 'bold' }}>Data</span> Mines
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', }}>
+                <span style={{ flexGrow: 1, color: '#000', fontWeight: 'bold', marginLeft: "10px" }}>Data</span> Mines
               </Typography>
             </Typography>
             <IconButton
@@ -250,32 +273,32 @@ function First(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: 'space-between', alignItems: 'center', width: '80vw' }}>
-              <div style={{ flexDirection: 'row', display: 'flex', paddingTop: '10px',gap:'20px' }}>
+            <Box className="main-header" >
+              <div style={{ flexDirection: 'row', display: 'flex', gap: '20px', alignItems: "center" }}>
                 <Link className='pricing' to='/aboutus'>
 
-                  <Typography variant='h6' style={{ color: 'black', paddingRight: '10px', fontSize: '1rem' }} >About Us</Typography>
+                  <Typography variant='h6' style={{ color: 'black', fontSize: '1rem' }} >About Us</Typography>
                 </Link>
                 <Link className='pricing' to='/pricing'>
                   <Typography variant="h6" style={{ color: 'black', fontSize: '1rem' }}>Pricing</Typography>
                 </Link>
               </div>
-              <div style={{ display: 'flex', margin: '20px' }}>
+              <div style={{ display: 'flex', margin: '20px 0px', justifyContent: 'flex-end' }} >
                 <Link to='/SignIn'>
 
-                  <Button style={{ fontFamily: 'Inter, sans-serif', padding: '10px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }}>
+                  <Button className='getstarted-btn'>
                     Get Started Free
                   </Button>
                 </Link>
-                <Button onClick={handlePopoverOpen} style={{ marginLeft: '20px', fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                  Request a Demo
+                <Button onClick={handlePopoverOpen} className='request-btn'>
+                  Request A Demo
                 </Button>
               </div>
             </Box>
 
           </Toolbar>
         </AppBar>
-
+        <ToastContainer />
         <nav>
           <Drawer
             container={container}
@@ -292,24 +315,30 @@ function First(props) {
               justifyContent: "center"
             }}
           >
-            <div class="drawer-links">
-              <Link className='pricing' to='/aboutus'>
-                <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
-              </Link>
-              <Link className='pricing' to='/pricing'>
-                <Typography variant="h6" style={{ color: 'black' }}>Pricing</Typography>
-              </Link>
-            </div>
-            <div class="drawer-btn">
-              <Link to='/SignIn'>
-                <Button style={{ fontFamily: 'Inter, sans-serif', marginBottom: "20px", width: '200px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }} >
-                  Get Started Free
-                </Button>
-              </Link>
-              <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                Request a Demo
-              </Button>
-            </div>
+            {mobileOpen && (
+              <div className="mobile-menu-content">
+                <Close onClick={handleDrawerToggle} style={{ margin: '20px' }} />
+
+                <div class="drawer-links">
+                  <Link className='pricing' to='/aboutus'>
+                    <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
+                  </Link>
+                  <Link className='pricing' to='/pricing'>
+                    <Typography variant="h6" style={{ color: 'black' }}>Pricing</Typography>
+                  </Link>
+                </div>
+                <div class="drawer-btn">
+                  <Link to='/SignIn'>
+                    <Button style={{ fontFamily: 'Inter, sans-serif', marginBottom: "20px", width: '200px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }} >
+                      Get Started Free
+                    </Button>
+                  </Link>
+                  <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
+                    Request A Demo
+                  </Button>
+                </div>
+              </div>
+            )}
             {/* </Box> */}
           </Drawer>
         </nav>
@@ -325,7 +354,7 @@ function First(props) {
             </Button>
           </Link>
           <Button onClick={handlePopoverOpen} style={{ marginLeft: '20px', marginTop: '20px', fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-            Request a Demo
+            Request A Demo
           </Button>
         </div>
       </div>
@@ -367,17 +396,17 @@ function First(props) {
             </Grid>
             <Grid item xs={12}>
               <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                Request a Demo
+                Request A Demo
               </Button>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
 
-      <div style={{ height: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: '40px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: '40px' }}>
         <Typography className='font1' variant="body2" style={{ fontSize: '14px', fontWeight: '600', lineHeight: '24px', fontFamily: 'Inter, sans-serif', color: '#546fff', paddingBottom: '20px' }}>How it operates</Typography>
         <Typography className='font2' variant="body1" style={{ fontSize: '2rem', fontWeight: '600', lineHeight: '44px', fontFamily: 'Inter, sans-serif', color: 'black', textAlign: 'center' }}>Facilitate complete process automation</Typography>
-        <video src={karzio} autoPlay loop muted controls={false} style={{ width: '60vw', height: '60vh', marginTop: '20px' }} />
+        <video src={karzio} loop muted controls={true} style={{ width: '60vw', maxHeight: '60vh', marginTop: '20px' }} />
       </div>
 
 
@@ -421,7 +450,7 @@ function First(props) {
                   {isExpanded[className] && (
                     <Typography
                       variant="body1"
-                      style={{ fontSize: '16px', fontWeight: '400', lineHeight: '20px', fontFamily: 'Inter, sans-serif' }}
+                      style={{ fontSize: '16px', fontWeight: '400', lineHeight: '20px', fontFamily: 'Inter, sans-serif', paddingTop: '10px' }}
                     >
                       {classContent[className]}
                     </Typography>
@@ -433,11 +462,11 @@ function First(props) {
           </Grid>
           {/* Grid 2 */}
           <Grid item xs={12} md={4.5}>
-            <Grid container style={{ height: '281px', borderRadius: '10px', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Grid container style={{ borderRadius: '10px', backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <img
-                src={imageSources[selectedClass] || download}
+                src={images[currentImageIndex]}
                 alt="Company logos"
-                style={{ maxWidth: '100%', marginBottom: isSmallScreen ? '16px' : '32px', backgroundSize: 'cover' }}
+                style={{ maxWidth: '100%', height: isSmallScreen ? 'auto' : '50vh', width: 'auto' }}
               />
             </Grid>
           </Grid>
@@ -494,7 +523,7 @@ function First(props) {
             </Grid>
             <Grid item xs={12}>
               <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                Request a Demo
+                Request A Demo
               </Button>
             </Grid>
           </Grid>
@@ -513,9 +542,9 @@ function First(props) {
 
                 <div style={{ textAlign: 'left' }}>
                   <Typography variant="h6" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}></Typography>
-                  <TextField label="Your Work Email" fullWidth style={{ marginBottom: '10px' }} />
-                  <TextField label="Your Phone Number" fullWidth style={{ marginBottom: '10px' }} />
-                  <TextField label="How can we help you" fullWidth multiline rows={4} style={{ marginBottom: '10px' }} />
+                  <TextField name="username" value={formData.username} onChange={handleChange} label="Your Work Email" fullWidth style={{ marginBottom: '10px' }} />
+                  <TextField name="email" value={formData.email} onChange={handleChange} label="Your Phone Number" fullWidth style={{ marginBottom: '10px' }} />
+                  <TextField name="phone" value={formData.phone} onChange={handleChange} label="How can we help you" fullWidth multiline rows={4} style={{ marginBottom: '10px' }} />
                   <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Submit a Query</Button>
                 </div>
               </Grid>
@@ -524,7 +553,7 @@ function First(props) {
                 <div style={{ textAlign: 'left', borderLeft: '1px solid #ccc', height: '100%', paddingLeft: '30px' }}>
                   <Typography variant="h6" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}>Talk to an AI expert</Typography>
                   <Typography variant="body1" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}>Get a free 15-minute consultation with our Automation experts. We can discuss Pricing, Integrations or try the app live on your own documents.</Typography>
-                  <Button onClick={handlePopoverOpen} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Request a Demo</Button>
+                  <Button onClick={handlePopoverOpen} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Request A Demo</Button>
                 </div>
               </Grid>
             </Grid>
@@ -533,15 +562,12 @@ function First(props) {
             id={id}
             open={open}
             anchorEl={anchorEl}
-            anchorPosition={{ top: 400, left: 400 }}
+            anchorReference={"none"}
             onClose={handlePopoverClose}
-            anchorOrigin={{
-              vertical: 'center',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'center',
-              horizontal: 'center',
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <IconButton
@@ -555,7 +581,7 @@ function First(props) {
             <div className='pop1' style={{ padding: '20px', width: '50vw', height: '70vh', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <ToastContainer />
               <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black' }}>
-                Request a Demo
+                Request A Demo
               </Typography>
               <TextField name="username" label="Your Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
               <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
@@ -571,10 +597,10 @@ function First(props) {
           <div style={{ paddingBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://facebook.com/profile.php?id=61555752627560" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
+                <a href="https://www.facebook.com/kraziocloud?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
+                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
                 <a href="https://instagram.com/krazio_cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>
@@ -583,7 +609,7 @@ function First(props) {
                 <a href="https://linkedin.com/company/krazio-cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><LinkedIn /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://kraziocloud.com" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Language /></a>
+                <a href="https://www.kraziocloud.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Language /></a>
               </Typography>
             </div>
             <div style={{ display: 'flex' }}>

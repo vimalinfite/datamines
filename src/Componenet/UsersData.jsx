@@ -4,10 +4,12 @@ import { Close as CloseIcon } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import logo1 from "../image/logo1.png";
 import "../PerformOCR.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avtar from '../image/Avtar.png';
-
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const UsersData = () => {
   const [userData, setUserData] = useState([]);
@@ -16,12 +18,16 @@ const UsersData = () => {
   const [userFiles, setUserFiles] = useState([]);
   const [trashData, setTrashData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(100);
+  const [itemsPerPage] = useState(5);
   const [sortOrder, setSortOrder] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [searchdata, setSearchData] = useState(false);
   const [filterdata, setFilteredData] = useState([])
   const [username, setUsername] = useState('');
+  const [updatedCreditPoints, setUpdatedCreditPoints] = useState('');
+  const [fetchPoints, setFetchPoints] = useState('')
+  const [expireDate, setExpireDate] = useState(null);
+
 
 
   const handleSortStatus = () => {
@@ -39,7 +45,7 @@ const UsersData = () => {
   };
 
   const TokenId = localStorage.getItem('token');
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchData();
     fetchUser()
@@ -139,7 +145,6 @@ const UsersData = () => {
       console.error('Error fetching user files:', error);
     }
   };
-
   const handlePopoverClose = () => {
     setAnchorEl(null);
     setSelectedUser(null);
@@ -233,11 +238,61 @@ const UsersData = () => {
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = userData.slice(indexOfFirstItem, indexOfLastItem);
 
 
+  const [creditPoints, setCreditPoints] = useState('');
+  const [editAnchorEl, setEditAnchorEl] = useState(null);
+  const handleEditPopoverOpen = (userId) => {
+    setEditAnchorEl(userId);
+  };
+
+  const handleEditPopoverClose = () => {
+    setEditAnchorEl(null);
+  };
+
+  const handleCreditPointsChange = (event) => {
+    setCreditPoints(event.target.value);
+  };
+  const handleExpireDateChange = (date) => {
+    setExpireDate(date); 
+  };
+
+  const handleSubmitCreditPoints = async (userId, points, ExpDate, user) => {
+    try {
+      const updatedPoints = parseInt(points) + parseInt(user.points); // Calculate total points
+      const formattedExpireDate = ExpDate.toISOString();
+  
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${TokenId}`);
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        redirect: "follow",
+        body: JSON.stringify({ points: updatedPoints, ExpDate: formattedExpireDate }),
+      };
+  
+      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/user_activate?user_id=${userId}&status=activate&points=${updatedPoints}&timestamp=${formattedExpireDate}`, requestOptions);
+  
+      const result = await response.json();
+      console.log(result);
+  
+      if (response.ok) {
+        handleEditPopoverClose();
+        fetchData();
+      } else {
+        console.error("Error updating points:", result.message || result);
+      }
+      setExpireDate(null);
+      setCreditPoints('');
+    } catch (error) {
+      console.error("Error updating points:", error);
+    }
+  };
+  
 
   const open = Boolean(anchorEl);
 
@@ -245,21 +300,23 @@ const UsersData = () => {
     <div style={{ width: '100%', overflowX: 'hidden', fontFamily: "'Inter var', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'" }}> {/* Adjusted width and overflow */}
       <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
         <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10 }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
-              <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
-              </Typography>
-            </div>
+          <Link to ='/'style={{textDecoration:'none'}} >
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello, {username}</Typography>
+            <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
+              <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
+            </Typography>
+          </div>
+          </Link>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello,  {username.length > 5 ? username.slice(0, 5) + '...' : username}</Typography>
             <img src={Avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
           </div>
         </Toolbar>
       </AppBar>
       <br />
       <Link to="/admin">
-        <ArrowBackIcon style={{ marginBottom: '10px', color: '#393BC5' }} />
+        <ArrowBackIcon style={{ color: '#393BC5' }} />
       </Link>
       <br />
       <Popover
@@ -316,14 +373,14 @@ const UsersData = () => {
         )}
       </Popover>
       <br />
-      <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '10px', marginBottom: '10px' }}>User Data</h1>
+      <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>User Data</h1>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <TextField
           label="Search by UserName and Mobile No."
           variant="outlined"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          style={{ marginBottom: '20px', width: '300px' }}
+          style={{ marginBottom: '10px', width: '300px' }}
         />
         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
           <Button variant="contained" style={{ backgroundColor: '#393bc5', color: 'white', marginRight: '10px' }} onClick={handleSearch}>
@@ -354,6 +411,7 @@ const UsersData = () => {
               <TableCell style={{ textAlign: 'center' }}>City</TableCell>
               <TableCell style={{ textAlign: 'center' }}>PinCode</TableCell>
               <TableCell style={{ textAlign: 'center' }}>Data</TableCell>
+              <TableCell style={{ textAlign: 'center' }}>Credit Points</TableCell>
               <TableCell style={{ textAlign: 'center' }}>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -378,18 +436,58 @@ const UsersData = () => {
                 <TableCell style={{ textAlign: 'center' }}>{user.state}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>{user.city}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>{user.pincode}</TableCell>
+
                 <TableCell style={{ textAlign: 'center', verticalAlign: 'top' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ marginRight: '10px' }}>{user.count}</div>
                     <Button color="primary" onClick={(event) => handlePopoverOpen(event, user)}>see details</Button>
                   </div>
                 </TableCell>
+                <TableCell>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ marginRight: '10px' }}>{user.points}</div>
+                    <Button variant="outlined" color="primary" onClick={() => handleEditPopoverOpen(user.user_id)}>Edit</Button>
+                    <Popover
+                      open={editAnchorEl === user.user_id}
+                      anchorEl={editAnchorEl}
+                      onClose={handleEditPopoverClose}
+                      anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'right',
+                      }}
 
+                    >
+                      <div style={{ padding: '10px', height: '30vh', width: '20vw' }}>
+                        <Typography> Credit Points: {user.points}</Typography>
+                        <TextField
+                          variant="outlined"
+                          value={creditPoints}
+                          onChange={handleCreditPointsChange}
+                          style={{ marginBottom: '10px' }}
+                          size="small"
+                        /><br />
+                        <br />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label="Select expire date"
+                            value={expireDate} // Set the value prop to the selected date
+                            onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
+                            renderInput={(params) => <TextField {...params} />}
+                            style={{ marginBottom: '10px' }}
+                          />
+                        </LocalizationProvider><br /><br />
+                        <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
+
+                      </div>
+                    </Popover>
+                  </div>
+                </TableCell>
                 <TableCell>
                   <Button variant="contained" onClick={() => user.status === 'activate' ? handleDeactivateUser(user.user_id) : handleActivateUser(user.user_id)} style={{ backgroundColor: user.status === 'activate' ? 'green' : 'red', color: 'white' }}>
                     {user.status}
                   </Button>
                 </TableCell>
+
               </TableRow>
             )) :
               userData.slice(indexOfFirstItem, indexOfLastItem).map((user, index) => (
@@ -412,7 +510,47 @@ const UsersData = () => {
                       <Button color="primary" onClick={(event) => handlePopoverOpen(event, user)}>see details</Button>
                     </div>
                   </TableCell>
+                  <TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ marginRight: '10px' }}>{user.points}</div>
+                      <Button variant="outlined" color="primary" onClick={() => handleEditPopoverOpen(user.user_id)}>Edit</Button>
+                      <Popover
+                        open={editAnchorEl === user.user_id}
+                        anchorEl={editAnchorEl}
+                        onClose={handleEditPopoverClose}
+                        anchorOrigin={{
+                          vertical: 'center',
+                          horizontal: 'right',
+                        }}
 
+                      >
+                        <div style={{ padding: '10px', height: '30vh', width: '20vw' }}>
+                          <Typography> Credit Points: {user.points}</Typography>
+                          <br />
+                          <TextField
+                            variant="outlined"
+                            value={creditPoints}
+                            onChange={handleCreditPointsChange}
+                            style={{ marginBottom: '10px' }}
+                            size="small"
+                          /><br />
+
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              label="Select expire date"
+                              value={expireDate} // Set the value prop to the selected date
+                              onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
+                              renderInput={(params) => <TextField {...params} />}
+                              style={{ marginBottom: '10px' }}
+                            />
+                          </LocalizationProvider><br /><br />
+                          <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
+
+
+                        </div>
+                      </Popover>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <Button variant="contained" onClick={() => user.status === 'activate' ? handleDeactivateUser(user.user_id) : handleActivateUser(user.user_id)} style={{ backgroundColor: user.status === 'activate' ? 'green' : 'red', color: 'white' }}>
                       {user.status}
@@ -423,19 +561,19 @@ const UsersData = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {filterdata.length < 101 || userData.length < 101 ? <></> :
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Pagination
-            count={searchdata ? Math.ceil(filterdata.length / itemsPerPage) : Math.ceil(userData.length / itemsPerPage)}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-            shape="rounded"
-            style={{ marginTop: 10, justifyContent: 'center' }}
-          />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',flexWrap:'wrap'}}>
 
-        </div>}
+        <Pagination
+          count={searchdata ? Math.ceil(filterdata.length / itemsPerPage) : Math.ceil(userData.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handleChangePage}
+          variant="outlined"
+          shape="rounded"
+          style={{ marginTop: 10, justifyContent: 'center' }}
+        />
+
+      </div>
     </div>
   );
 }

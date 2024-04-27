@@ -102,12 +102,14 @@ const SignIn = () => {
         <div style={{ position: 'relative', height: '100vh' }}>
             <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
                 <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10 }}>
+                    <Link to ='/' style={{textDecoration:'none'}}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
                             <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data</span> Mines
                         </Typography>
                     </div>
+                    </Link>
                 </Toolbar>
             </AppBar>
             {loading && (
@@ -126,7 +128,7 @@ const SignIn = () => {
                     <form onSubmit={handleSignIn} style={{margin: " 0px 0px"}}>
                         <TextField
                             type="text"
-                            placeholder="Mobile no / E-mail"
+                            placeholder="E-mail"
                             name="condition"
                             value={data.condition}
                             onChange={handleChange}

@@ -4,7 +4,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { Typography, Button, Grid, TextField, Popover, IconButton } from '@mui/material';
 import './FIrst.css';
-import download from './image/download.png'
 import { KeyboardArrowUp, KeyboardArrowDown, Close } from '@mui/icons-material';
 import flag from './image/flag.png'
 import { Link } from 'react-router-dom'
@@ -28,7 +27,8 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import karzio from '../src/image/karzio.mp4'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
 
 const AboutUs = (props) => {
   const [selectedClass, setSelectedClass] = useState('');
@@ -161,7 +161,7 @@ const AboutUs = (props) => {
               Get Started Free
             </Button>
             <Button onClick={handlePopoverOpen} style={{ marginLeft: '20px', fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-              Request a Demo
+              Request A Demo
             </Button>
           </ListItem>
         ))}
@@ -173,12 +173,11 @@ const AboutUs = (props) => {
 
   //******
   return (
-    <>
+    <div style={{ backgroundColor: '#fffefe' }}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar component="nav" style={{ background: 'white', color: "black",justifyContent:'center'  }}>
+        <AppBar component="nav" style={{ background: 'white', color: "black", justifyContent: 'center' }}>
           <Toolbar>
-
             <Typography
               variant="h6"
               component="div"
@@ -186,11 +185,10 @@ const AboutUs = (props) => {
             >
               {/* MUI */}
               <Link to="/" style={{ textDecoration: 'none' }}>
-
                 <img className="egg" src={logo} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} alt="Logo" />
               </Link>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', marginLeft: '10px' }}>
-                <span style={{ flexGrow: 1, color: '#000', marginLeft: '10px', fontWeight: 'bold' }}>Data</span> Mines
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', }}>
+                <span style={{ flexGrow: 1, color: '#000', fontWeight: 'bold', marginLeft: "10px" }}>Data</span> Mines
               </Typography>
             </Typography>
             <IconButton
@@ -202,32 +200,32 @@ const AboutUs = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: 'space-between', alignItems: 'center', width: '80vw' }}>
-              <div style={{ flexDirection: 'row', display: 'flex', paddingTop: '10px' }}>
+            <Box className="main-header" >
+              <div style={{ flexDirection: 'row', display: 'flex',gap:'20px', alignItems: "center" }}>
                 <Link className='pricing' to='/aboutus'>
 
-                  <Typography variant='h6' style={{ color: 'black', paddingRight: '10px', fontSize: '1rem' }} >About Us</Typography>
+                <Typography variant='h6' style={{ color: 'black', fontSize: '1rem' }} >About Us</Typography>
                 </Link>
                 <Link className='pricing' to='/pricing'>
                   <Typography variant="h6" style={{ color: 'black', fontSize: '1rem' }}>Pricing</Typography>
                 </Link>
               </div>
-              <div style={{ display: 'flex', margin: '20px' }}>
+              <div style={{ display: 'flex', margin: '20px 0px', justifyContent: 'flex-end' }} >
                 <Link to='/SignIn'>
 
-                  <Button style={{ fontFamily: 'Inter, sans-serif', padding: '10px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }}>
+                <Button className='getstarted-btn'>
                     Get Started Free
                   </Button>
                 </Link>
-                <Button onClick={handlePopoverOpen} style={{ marginLeft: '20px', fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                  Request a Demo
+                <Button onClick={handlePopoverOpen} className='request-btn'>
+                  Request A Demo
                 </Button>
               </div>
             </Box>
 
           </Toolbar>
         </AppBar>
-
+        <ToastContainer />
         <nav>
           <Drawer
             container={container}
@@ -244,7 +242,11 @@ const AboutUs = (props) => {
               justifyContent: "center"
             }}
           >
-            <div class="drawer-links">
+             {mobileOpen && (
+          <div className="mobile-menu-content">
+            <Close onClick={handleDrawerToggle} style={{margin: '20px'}}/>
+
+             <div class="drawer-links">
               <Link className='pricing' to='/aboutus'>
                 <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
               </Link>
@@ -259,26 +261,25 @@ const AboutUs = (props) => {
                 </Button>
               </Link>
               <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                Request a Demo
+                Request A Demo
               </Button>
             </div>
+          </div>
+        )}
             {/* </Box> */}
           </Drawer>
         </nav>
       </Box>
       <br /><br /><br /><br /><br /><br />
       <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+  <h1 style={{ color: '#546FFF', marginBottom: '20px', width: '90vw', textAlign: 'left' }}>About Us</h1>
+  <div style={{ height: 'auto', width: '90vw', backgroundColor: '#546FFF', justifyContent: 'center', display: 'flex', flexDirection: 'column', padding: '20px' }}>
+    <p style={{ margin: '10px', color: '#fff', textAlign: 'left' }}>OUR VISION</p>
+    <h2 style={{ margin: '10px', color: '#fff', textAlign: 'left' }}>To achieve the same level of widespread adoption for Machine Learning as seen with databases.</h2>
+    <p style={{ margin: '10px', color: '#fff', textAlign: 'left' }}>Due to Oracle's dominance, there are no competing companies in the database market. Through our services, all companies will harness the power of Machine Learning.</p>
+  </div>
+</div>
 
-        {/* <span><ArrowBackIcon style={{ marginRight:'10px', color: '#393BC5' }} /></span> */}
-
-        <h1 style={{ color: '#546FFF', marginBottom: '20px', width: '90vw' }}>  About Us</h1>
-
-        <div style={{ height: '30vh', width: '90vw', backgroundColor: '#546FFF', justifyContent: 'center', display: 'flex', flexDirection: 'column',padding: '0px 20px'  }}>
-          <p style={{ margin: '10px', color: '#fff', padding: '0px 20px' }}>OUR VISION</p>
-          <h2 style={{ margin: '10px', color: '#fff', padding: '0px 20px' }}>To achieve the same level of widespread adoption for Machine Learning as seen with databases.</h2>
-          <p style={{ margin: '10px', color: '#fff', padding: '0px 20px' }}>Due to Oracle's dominance, there are no competing companies in the database market. Through our services, all companies will harness the power of Machine Learning.</p>
-        </div>
-      </div>
       <div style={{ marginTop: '40px', padding: '20px', textAlign: 'center' }}>
         <img src={badges1} style={{ height: '150px', gap: '20px' }} alt="" />
         <img src={badges2} style={{ height: '150px', gap: '20px' }} alt="" />
@@ -307,7 +308,7 @@ const AboutUs = (props) => {
                 <div style={{ textAlign: 'left', borderLeft: '1px solid #ccc', height: '100%', paddingLeft: '30px' }}>
                   <Typography variant="h6" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}>Talk to an AI expert</Typography>
                   <Typography variant="body1" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}>Get a free 15-minute consultation with our Automation experts. We can discuss Pricing, Integrations or try the app live on your own documents.</Typography>
-                  <Button onClick={handlePopoverOpen} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Request a Demo</Button>
+                  <Button onClick={handlePopoverOpen} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Request A Demo</Button>
                 </div>
               </Grid>
             </Grid>
@@ -338,7 +339,7 @@ const AboutUs = (props) => {
             <div className='pop1' style={{ padding: '20px', width: '50vw', height: '70vh', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <ToastContainer />
               <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black' }}>
-                Request a Demo
+                Request A Demo
               </Typography>
               <TextField name="username" label="Your Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
               <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
@@ -354,10 +355,10 @@ const AboutUs = (props) => {
           <div style={{ paddingBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
            <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://facebook.com/profile.php?id=61555752627560" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
+                <a href="https://www.facebook.com/kraziocloud?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
+                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
               </Typography>
               <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
                 <a href="https://instagram.com/krazio_cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>
@@ -378,7 +379,7 @@ const AboutUs = (props) => {
           </div>
         </div>
       </div>
-    </>
+      </div>
   )
 }
 
