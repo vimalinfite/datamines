@@ -111,7 +111,7 @@ function First(props) {
       redirect: "follow"
     };
   
-    fetch("http://139.59.58.53:2424/cardapi/v1/data_store", requestOptions)
+    fetch("https://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
