@@ -704,7 +704,7 @@ const AdminPerformOCR = () => {
             {isLoading && (
               <div style={{ marginBottom: '10vh' }}>
                 <p style={{ color: 'red', fontSize: '2rem', fontFamily: 'Inter, sans-serif', marginTop: '20px' }}>Do not refresh the page (it may take long time)</p>
-                <p style={{ color: 'black', fontSize: '1.3rem', fontFamily: 'Inter, sans-serif' }}>Watch a award-winning film while we work on your results. Thanks for being patience.</p>
+              
               </div>
             )}
           </div>
