@@ -7,9 +7,9 @@ import "../PerformOCR.css";
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avtar from '../image/Avtar.png';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const UsersData = () => {
   const [userData, setUserData] = useState([]);
@@ -467,7 +467,7 @@ const UsersData = () => {
                           size="small"
                         /><br />
                         <br />
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DatePicker
                             label="Select expire date"
                             value={expireDate} // Set the value prop to the selected date
@@ -475,7 +475,7 @@ const UsersData = () => {
                             renderInput={(params) => <TextField {...params} />}
                             style={{ marginBottom: '10px' }}
                           />
-                        </LocalizationProvider><br /><br />
+                        </LocalizationProvider><br /><br /> */}
                         <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
 
                       </div>
@@ -535,7 +535,7 @@ const UsersData = () => {
                             size="small"
                           /><br />
 
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                               label="Select expire date"
                               value={expireDate} // Set the value prop to the selected date
@@ -543,7 +543,7 @@ const UsersData = () => {
                               renderInput={(params) => <TextField {...params} />}
                               style={{ marginBottom: '10px' }}
                             />
-                          </LocalizationProvider><br /><br />
+                          </LocalizationProvider><br /><br /> */}
                           <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
 
 
