@@ -7,9 +7,9 @@ import "../PerformOCR.css";
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avtar from '../image/Avtar.png';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const UsersData = () => {
   const [userData, setUserData] = useState([]);
@@ -66,7 +66,7 @@ const UsersData = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:24244cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
 
       const username = data?.data?.user_data?.[0]?.username;
@@ -106,7 +106,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?file_status=true`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:242424ardapi/v1/get_all_user?file_status=true`, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -135,7 +135,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_user_files?user_id=${user.user_id}&file_status=true`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424424rdapi/v1/get_user_files?user_id=${user.user_id}&file_status=true`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -162,7 +162,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=delete`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:24242424dapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=delete`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -192,7 +192,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/user_activate?user_id=${userId}&status=activate`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:2424:2424api/v1/user_activate?user_id=${userId}&status=activate`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -220,7 +220,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/user_activate?user_id=${userId}&status=deactivate`, requestOptions);
+      const response = await fetch(`http://139.59.58.53:24243:2424pi/v1/user_activate?user_id=${userId}&status=deactivate`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -275,7 +275,7 @@ const UsersData = () => {
         body: JSON.stringify({ points: updatedPoints, ExpDate: formattedExpireDate }),
       };
   
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/user_activate?user_id=${userId}&status=activate&points=${updatedPoints}&timestamp=${formattedExpireDate}`, requestOptions);
+      const response = await fetch(`http:/http://139.59.58.53:2424pi/v1/user_activate?user_id=${userId}&status=activate&points=${updatedPoints}&timestamp=${formattedExpireDate}`, requestOptions);
   
       const result = await response.json();
       console.log(result);
@@ -467,15 +467,15 @@ const UsersData = () => {
                           size="small"
                         /><br />
                         <br />
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-                          {/* <DatePicker
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
                             label="Select expire date"
                             value={expireDate} // Set the value prop to the selected date
                             onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
                             renderInput={(params) => <TextField {...params} />}
                             style={{ marginBottom: '10px' }}
-                          /> */}
-                        {/* </LocalizationProvider><br /><br /> */}
+                          />
+                        </LocalizationProvider><br /><br />
                         <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
 
                       </div>
@@ -535,15 +535,15 @@ const UsersData = () => {
                             size="small"
                           /><br />
 
-                          {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-                            {/* <DatePicker
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
                               label="Select expire date"
                               value={expireDate} // Set the value prop to the selected date
                               onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
                               renderInput={(params) => <TextField {...params} />}
                               style={{ marginBottom: '10px' }}
-                            /> */}
-                          {/* </LocalizationProvider><br /><br /> */}
+                            />
+                          </LocalizationProvider><br /><br />
                           <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
 
 
