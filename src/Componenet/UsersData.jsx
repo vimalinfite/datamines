@@ -7,7 +7,7 @@ import "../PerformOCR.css";
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avtar from '../image/Avtar.png';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -468,13 +468,13 @@ const UsersData = () => {
                         /><br />
                         <br />
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
+                          {/* <DatePicker
                             label="Select expire date"
                             value={expireDate} // Set the value prop to the selected date
                             onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
                             renderInput={(params) => <TextField {...params} />}
                             style={{ marginBottom: '10px' }}
-                          />
+                          /> */}
                         </LocalizationProvider><br /><br />
                         <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
 
@@ -536,13 +536,13 @@ const UsersData = () => {
                           /><br />
 
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
+                            {/* <DatePicker
                               label="Select expire date"
                               value={expireDate} // Set the value prop to the selected date
                               onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
                               renderInput={(params) => <TextField {...params} />}
                               style={{ marginBottom: '10px' }}
-                            />
+                            /> */}
                           </LocalizationProvider><br /><br />
                           <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
 
