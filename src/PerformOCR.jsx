@@ -353,7 +353,7 @@ const PerformOCR = () => {
       });
       const userId = localStorage.getItem('uid')
       console.log("========= userID   =======",userId);
-      const response = await axios.post(`https://134.209.153.179/cardapi/v1/get_text_extract?user_id=${userId}`, data1, axiosConfig, { timeout: 500000 });
+      const response = await axios.post(`http://134.209.153.179/cardapi/v1/get_text_extract?user_id=${userId}`, data1, axiosConfig, { timeout: 500000 });
       console.log("=================>", response.data.data.output_data);
       const extractedData = response.data.data.output_data.map(item => ({ ...item, file: item.filename }));
       setDataa([...dataa, extractedData]);
@@ -423,7 +423,7 @@ const PerformOCR = () => {
       };
 
        const response = 
-      await fetch("https://134.209.153.179/cardapi/v1/file_store", requestOptions)
+      await fetch("http://134.209.153.179/cardapi/v1/file_store", requestOptions)
       const result = await response;
       console.log("////////555555555555555555///////", result);
     } catch (error) {
@@ -467,7 +467,7 @@ const PerformOCR = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`https://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
       // console.log("============>",data.data.user_data[0]);
       const CreditPoints = data?.data?.user_data?.[0]?.points;
