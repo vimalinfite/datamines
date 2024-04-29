@@ -389,6 +389,7 @@ const PerformOCR = () => {
           }
         );
       }
+      fetchUser()
     } catch (error) {
       console.error('Error uploading file and getting response:', error);
     }
