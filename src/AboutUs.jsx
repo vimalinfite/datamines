@@ -115,8 +115,8 @@ const AboutUs = (props) => {
       body: formdata,
       redirect: "follow"
     };
-  
-    fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
+
+    fetch("https://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

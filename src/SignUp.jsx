@@ -101,7 +101,7 @@ const SignUp = () => {
         formData.append("contact_no", phone)
         console.log("=-----------==========>", formData);
         try {
-            const response = await axios.post(`http://134.209.153.179/cardapi/v1/register?user_id=${localId}`, formData);
+            const response = await axios.post(`https://134.209.153.179/cardapi/v1/register?user_id=${localId}`, formData);
             console.log("=========  res data   ============> Registration successful:", response.data);
             if (response.data.statusCode == 200) {
                 toast.success('sign up successfully')
