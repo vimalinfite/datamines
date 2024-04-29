@@ -94,42 +94,52 @@ const AboutUs = (props) => {
 
 
   const submitdemo = () => {
+    // Check if any required field is empty
+    if (!formData.username || !formData.email || !formData.phone) {
+      toast.error('Please fill all required fields.');
+      return; // Exit the function if any field is empty
+    }
+  
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${TokenId}`);
-
+  
     const formdata = new FormData();
     formdata.append("username", formData.username);
     formdata.append("email", formData.email);
     formdata.append("phone", formData.phone);
     formdata.append("company_name", formData.company_name);
-
+  
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formdata,
       redirect: "follow"
     };
-
-    fetch("http://139.59.58.53:2424/cardapi/v1/data_store", requestOptions)
+  
+    fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        // Reset form data
+        setFormData({
+          username: '',
+          email: '',
+          phone: '',
+          company_name: ''
+        });
         return response.text();
       })
       .then((result) => {
-        // Check if the result contains a message indicating email exists
-        if (result.includes("Email already exits...")) {
-          toast.warn('Email already exits...');
+        if (result.includes("Email already exists...")) {
+          toast.warn('Email already exists...');
         } else {
-          // Show success toast if email does not exist
           toast.success('Thank you for visiting. Our team will reach you soon.');
-          console.log("============== sent succes  ==============>", result);
+          console.log("============== sent success ==============>", result);
         }
       })
       .catch((error) => {
         console.error(error);
-        // Show error toast if needed
       });
   };
 
@@ -293,13 +303,14 @@ const AboutUs = (props) => {
             <Grid container spacing={4}>
 
               <Grid item xs={12} md={8}>
-                <ToastContainer />
 
                 <div style={{ textAlign: 'left' }}>
                   <Typography variant="h6" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}></Typography>
                   <TextField label="Your Work Email" fullWidth style={{ marginBottom: '10px' }} />
                   <TextField label="Your Phone Number" fullWidth style={{ marginBottom: '10px' }} />
                   <TextField label="How can we help you" fullWidth multiline rows={4} style={{ marginBottom: '10px' }} />
+                <ToastContainer />
+
                   <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Submit a Query</Button>
                 </div>
               </Grid>
@@ -317,15 +328,12 @@ const AboutUs = (props) => {
             id={id}
             open={open}
             anchorEl={anchorEl}
-            anchorPosition={{top:400,left:400}}
+            anchorReference={"none"}
             onClose={handlePopoverClose}
-            anchorOrigin={{
-              vertical: 'center',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'center',
-              horizontal: 'center',
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <IconButton
@@ -337,7 +345,6 @@ const AboutUs = (props) => {
               <Close />
             </IconButton>
             <div className='pop1' style={{ padding: '20px', width: '50vw', height: '70vh', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-              <ToastContainer />
               <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black' }}>
                 Request A Demo
               </Typography>
@@ -345,6 +352,7 @@ const AboutUs = (props) => {
               <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
               <TextField name="phone" label="Your Phone Number" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
               <TextField name="company_name" label="Company Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
+              <ToastContainer/>
               <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', color: 'white', width: '60%', borderRadius: '5px', padding: '12px', fontFamily: 'Inter, sans-serif' }}>
                 Submit
               </Button>

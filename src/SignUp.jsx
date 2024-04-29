@@ -101,7 +101,7 @@ const SignUp = () => {
         formData.append("contact_no", phone)
         console.log("=-----------==========>", formData);
         try {
-            const response = await axios.post(`http://139.59.58.53:2424/cardapi/v1/register?user_id=${localId}`, formData);
+            const response = await axios.post(`http://134.209.153.179/cardapi/v1/register?user_id=${localId}`, formData);
             console.log("=========  res data   ============> Registration successful:", response.data);
             if (response.data.statusCode == 200) {
                 toast.success('sign up successfully')
@@ -394,7 +394,7 @@ const SignUp = () => {
                         </Grid>
                         <Grid item xs={12} flexDirection={"row"}>
                             <PhoneInput
-                                country={'us'}
+                                country={'in'}
                                 value={phone}
                                 onChange={(phone) => setPhone("+" + phone)}
                                 inputStyle={{ width: '100%', height: '50px', borderRadius: '5px', border: '1px solid #ccc' }}

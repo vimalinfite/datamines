@@ -67,42 +67,52 @@ const [formData, setFormData] = useState({
 
 
   const submitdemo = () => {
+    // Check if any required field is empty
+    if (!formData.username || !formData.email || !formData.phone) {
+      toast.error('Please fill all required fields.');
+      return; // Exit the function if any field is empty
+    }
+  
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${TokenId}`);
-
+  
     const formdata = new FormData();
     formdata.append("username", formData.username);
     formdata.append("email", formData.email);
     formdata.append("phone", formData.phone);
     formdata.append("company_name", formData.company_name);
-
+  
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formdata,
       redirect: "follow"
     };
-
-    fetch("http://139.59.58.53:2424/cardapi/v1/data_store", requestOptions)
+  
+    fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        // Reset form data
+        setFormData({
+          username: '',
+          email: '',
+          phone: '',
+          company_name: ''
+        });
         return response.text();
       })
       .then((result) => {
-        // Check if the result contains a message indicating email exists
-        if (result.includes("Email already exits...")) {
-          toast.warn('Email already exits...');
+        if (result.includes("Email already exists...")) {
+          toast.warn('Email already exists...');
         } else {
-          // Show success toast if email does not exist
           toast.success('Thank you for visiting. Our team will reach you soon.');
-          console.log("============== sent succes  ==============>", result);
+          console.log("============== sent success ==============>", result);
         }
       })
       .catch((error) => {
         console.error(error);
-        // Show error toast if needed
       });
   };
 

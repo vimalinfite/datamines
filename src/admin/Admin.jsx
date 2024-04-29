@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Button, Container, Grid, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Container, Grid, Box, useMediaQuery } from '@mui/material';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo1 from "../image/logo1.png"
 import { MdPeople, MdDelete,MdDashboard } from 'react-icons/md'; 
@@ -12,7 +12,7 @@ const Admin = () => {
     localStorage.removeItem('type');
     navigate('/');
   };
-
+  const isMobile = useMediaQuery('(max-width:600px)');
   return (
     <Container style={{ minHeight: '90vh', paddingTop: '64px', display: 'flex', flexDirection: 'column', fontFamily: 'Montserrat, sans-serif' }}>
       <AppBar position="fixed" style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
@@ -20,9 +20,9 @@ const Admin = () => {
       <Link to ='/' style={{textDecoration:'none'}}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img className="egg" src={logo1} alt="Logo" style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
+         {!isMobile&& (<Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
         <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px',fontWeight:'bold' }}>Data</span> Mines
-      </Typography>
+      </Typography>)}
         </div>
         </Link>
         <Button style={{ backgroundColor: 'white', color: '#393bc5',textTransform: 'none' }} onClick={handleLogout}>

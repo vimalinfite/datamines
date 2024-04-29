@@ -351,7 +351,7 @@ const AdminPerformOCR = () => {
       });
       const userId = localStorage.getItem('uid')
       console.log("========= userID   =======",userId);
-      const response = await axios.post(`http://139.59.58.53:2424/cardapi/v1/get_text_extract?user_id=${userId}`, data1, axiosConfig, { timeout: 500000 });
+      const response = await axios.post(`http://134.209.153.179/cardapi/v1/get_text_extract?user_id=${userId}`, data1, axiosConfig, { timeout: 500000 });
       console.log("=================>", response.data.data.output_data);
       const extractedData = response.data.data.output_data.map(item => ({ ...item, file: item.filename }));
       setDataa([...dataa, extractedData]);
@@ -420,7 +420,7 @@ const AdminPerformOCR = () => {
         redirect: "follow"
       };
 
-      const response = await fetch("http://139.59.58.53:2424/cardapi/v1/file_store", requestOptions);
+      const response = await fetch("http://134.209.153.179/cardapi/v1/file_store", requestOptions);
       const result = await response;
       console.log("////////555555555555555555///////", result);
     } catch (error) {
@@ -464,7 +464,7 @@ const AdminPerformOCR = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
       // console.log("============>",data.data.user_data[0]);
       const CreditPoints = data?.data?.user_data?.[0]?.points;
@@ -704,7 +704,7 @@ const AdminPerformOCR = () => {
             {isLoading && (
               <div style={{ marginBottom: '10vh' }}>
                 <p style={{ color: 'red', fontSize: '2rem', fontFamily: 'Inter, sans-serif', marginTop: '20px' }}>Do not refresh the page (it may take long time)</p>
-              
+                <p style={{ color: 'black', fontSize: '1.3rem', fontFamily: 'Inter, sans-serif' }}>Watch a award-winning film while we work on your results. Thanks for being patience.</p>
               </div>
             )}
           </div>

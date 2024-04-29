@@ -74,7 +74,7 @@ const SignIn = () => {
 
         try {
             console.log("ASdad");
-            const response = await axios.post("http://139.59.58.53:2424/cardapi/v1/login", formData);
+            const response = await axios.post("http://134.209.153.179/cardapi/v1/login", formData);
             setEmaill(response.data.data.email);
             setApiOtp(response.data.data.mail_otp);
             setLoginData(response.data);

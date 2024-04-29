@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Popover, IconButton, Typography, Pagination, TextField } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Popover, IconButton, Typography, Pagination, TextField, useMediaQuery } from '@mui/material';
+import { Close, Close as CloseIcon } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import logo1 from "../image/logo1.png";
 import "../PerformOCR.css";
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avtar from '../image/Avtar.png';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import "./UserData.css"
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'; // Import the styles
+import { ToastContainer, toast } from 'react-toastify';
 const UsersData = () => {
   const [userData, setUserData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -66,7 +66,7 @@ const UsersData = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`http://139.59.58.53:24244cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
 
       const username = data?.data?.user_data?.[0]?.username;
@@ -106,7 +106,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:242424ardapi/v1/get_all_user?file_status=true`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_all_user?file_status=true`, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -135,7 +135,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424424rdapi/v1/get_user_files?user_id=${user.user_id}&file_status=true`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_user_files?user_id=${user.user_id}&file_status=true`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -162,7 +162,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:24242424dapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=delete`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=delete`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -192,7 +192,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424:2424api/v1/user_activate?user_id=${userId}&status=activate`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/user_activate?user_id=${userId}&status=activate`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -220,7 +220,7 @@ const UsersData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:24243:2424pi/v1/user_activate?user_id=${userId}&status=deactivate`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/user_activate?user_id=${userId}&status=deactivate`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -258,14 +258,14 @@ const UsersData = () => {
     setCreditPoints(event.target.value);
   };
   const handleExpireDateChange = (date) => {
-    setExpireDate(date); 
+    setExpireDate(date);
   };
 
   const handleSubmitCreditPoints = async (userId, points, ExpDate, user) => {
     try {
       const updatedPoints = parseInt(points) + parseInt(user.points); // Calculate total points
       const formattedExpireDate = ExpDate.toISOString();
-  
+
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${TokenId}`);
       const requestOptions = {
@@ -274,15 +274,17 @@ const UsersData = () => {
         redirect: "follow",
         body: JSON.stringify({ points: updatedPoints, ExpDate: formattedExpireDate }),
       };
-  
-      const response = await fetch(`http:/http://139.59.58.53:2424pi/v1/user_activate?user_id=${userId}&status=activate&points=${updatedPoints}&timestamp=${formattedExpireDate}`, requestOptions);
-  
+
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/user_activate?user_id=${userId}&status=activate&points=${updatedPoints}&timestamp=${formattedExpireDate}`, requestOptions);
+
       const result = await response.json();
       console.log(result);
-  
+
       if (response.ok) {
-        handleEditPopoverClose();
         fetchData();
+        toast.success('Credit Points added successfully')
+        handleEditPopoverClose();
+
       } else {
         console.error("Error updating points:", result.message || result);
       }
@@ -292,24 +294,27 @@ const UsersData = () => {
       console.error("Error updating points:", error);
     }
   };
-  
+
 
   const open = Boolean(anchorEl);
-
+  const isMobile = useMediaQuery('(max-width:600px)');
+  
   return (
     <div style={{ width: '100%', overflowX: 'hidden', fontFamily: "'Inter var', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'" }}> {/* Adjusted width and overflow */}
       <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
         <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10 }}>
-          <Link to ='/'style={{textDecoration:'none'}} >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
-              <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
-            </Typography>
-          </div>
+          <Link to='/' style={{ textDecoration: 'none' }} >
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
+              {!isMobile && (
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
+                  <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
+                </Typography>
+              )}
+            </div>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello,  {username.length > 5 ? username.slice(0, 5) + '...' : username}</Typography>
+            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello,  {username.length > 8 ? username.slice(0, 8) + '...' : username}</Typography>
             <img src={Avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
           </div>
         </Toolbar>
@@ -373,6 +378,7 @@ const UsersData = () => {
         )}
       </Popover>
       <br />
+      <ToastContainer/>
       <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>User Data</h1>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <TextField
@@ -455,29 +461,34 @@ const UsersData = () => {
                         vertical: 'center',
                         horizontal: 'right',
                       }}
-
                     >
-                      <div style={{ padding: '10px', height: '30vh', width: '20vw' }}>
+                      <IconButton style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleEditPopoverClose}>
+                        <CloseIcon />
+                      </IconButton>
+                      <br />
+                      <div className='dateResponsive' style={{ padding: '10px', height: '45vh',width:'25vw', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                         <Typography> Credit Points: {user.points}</Typography>
+                        <br />
                         <TextField
                           variant="outlined"
+                          label="Enter credit points"
                           value={creditPoints}
                           onChange={handleCreditPointsChange}
-                          style={{ marginBottom: '10px' }}
+                          className='textField'
+                          style={{ marginBottom: '10px', width: '50%' }}
                           size="small"
-                        /><br />
+                        />
                         <br />
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="Select expire date"
-                            value={expireDate} // Set the value prop to the selected date
-                            onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
-                            renderInput={(params) => <TextField {...params} />}
-                            style={{ marginBottom: '10px' }}
-                          />
-                        </LocalizationProvider><br /><br /> */}
-                        <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
+                        <DatePicker
+                          selected={expireDate}
+                          onChange={handleExpireDateChange}
+                          placeholderText="Select expire date"
+                          dateFormat="dd/MM/yyyy"
+                          className="custom-datepicker"
+                        />
+                        <br /><br />
 
+                        <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
                       </div>
                     </Popover>
                   </div>
@@ -515,40 +526,44 @@ const UsersData = () => {
                       <div style={{ marginRight: '10px' }}>{user.points}</div>
                       <Button variant="outlined" color="primary" onClick={() => handleEditPopoverOpen(user.user_id)}>Edit</Button>
                       <Popover
-                        open={editAnchorEl === user.user_id}
-                        anchorEl={editAnchorEl}
-                        onClose={handleEditPopoverClose}
-                        anchorOrigin={{
-                          vertical: 'center',
-                          horizontal: 'right',
-                        }}
+                      open={editAnchorEl === user.user_id}
+                      anchorEl={editAnchorEl}
+                      onClose={handleEditPopoverClose}
+                      anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'right',
+                      }}
+                    >
+                      <IconButton style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleEditPopoverClose}>
+                        <CloseIcon />
+                      </IconButton>
+                      <br />
+                      <div className='dateResponsive' style={{ padding: '10px', height: '45vh',width:'25vw', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                        <Typography> Credit Points: {user.points}</Typography>
+                        <br />
+                        <TextField
+                          variant="outlined"
+                          label="Enter credit points"
+                          value={creditPoints}
+                          onChange={handleCreditPointsChange}
+                          className='textField'
+                          style={{ marginBottom: '10px', width: '50%' }}
+                          size="small"
+                        />
+                        <br />
+                        <DatePicker
+                          selected={expireDate}
+                          onChange={handleExpireDateChange}
+                          placeholderText="Select expire date"
+                          dateFormat="dd/MM/yyyy"
+                          className="custom-datepicker"
+                        />
+                        <br /><br />
+                        <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
+                      </div>
+                    </Popover>
 
-                      >
-                        <div style={{ padding: '10px', height: '30vh', width: '20vw' }}>
-                          <Typography> Credit Points: {user.points}</Typography>
-                          <br />
-                          <TextField
-                            variant="outlined"
-                            value={creditPoints}
-                            onChange={handleCreditPointsChange}
-                            style={{ marginBottom: '10px' }}
-                            size="small"
-                          /><br />
 
-                          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              label="Select expire date"
-                              value={expireDate} // Set the value prop to the selected date
-                              onChange={handleExpireDateChange} // Handle the onChange event to update the selected date
-                              renderInput={(params) => <TextField {...params} />}
-                              style={{ marginBottom: '10px' }}
-                            />
-                          </LocalizationProvider><br /><br /> */}
-                          <Button variant="contained" color="primary" onClick={() => handleSubmitCreditPoints(user.user_id, creditPoints, expireDate, user)}>Submit</Button>
-
-
-                        </div>
-                      </Popover>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -562,7 +577,7 @@ const UsersData = () => {
         </Table>
       </TableContainer>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',flexWrap:'wrap'}}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
 
         <Pagination
           count={searchdata ? Math.ceil(filterdata.length / itemsPerPage) : Math.ceil(userData.length / itemsPerPage)}

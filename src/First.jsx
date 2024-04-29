@@ -111,7 +111,7 @@ function First(props) {
       redirect: "follow"
     };
   
-    fetch("http://139.59.58.53:2424/cardapi/v1/data_store", requestOptions)
+    fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -541,13 +541,14 @@ function First(props) {
             <Grid container spacing={4}>
 
               <Grid item xs={12} md={8}>
-                <ToastContainer />
 
                 <div style={{ textAlign: 'left' }}>
+
                   <Typography variant="h6" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}></Typography>
                   <TextField name="username" value={formData.username} onChange={handleChange} label="Your Work Email" fullWidth style={{ marginBottom: '10px' }} />
                   <TextField name="email" value={formData.email} onChange={handleChange} label="Your Phone Number" fullWidth style={{ marginBottom: '10px' }} />
                   <TextField name="phone" value={formData.phone} onChange={handleChange} label="How can we help you" fullWidth multiline rows={4} style={{ marginBottom: '10px' }} />
+                <ToastContainer />
                   <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Submit a Query</Button>
                 </div>
               </Grid>
@@ -582,7 +583,6 @@ function First(props) {
               <Close />
             </IconButton>
             <div className='pop1' style={{ padding: '20px', width: '50vw', height: '70vh', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-              <ToastContainer />
               <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black' }}>
                 Request A Demo
               </Typography>
@@ -590,11 +590,13 @@ function First(props) {
               <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
               <TextField name="phone" label="Your Phone Number" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
               <TextField name="company_name" label="Company Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
+              <ToastContainer />
               <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', color: 'white', width: '60%', borderRadius: '5px', padding: '12px', fontFamily: 'Inter, sans-serif' }}>
                 Submit
               </Button>
             </div>
           </Popover>
+
         </div>
         <div style={{ backgroundColor: '#2b3570', height: '60vh', justifyContent: 'flex-end', alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
           <div style={{ paddingBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

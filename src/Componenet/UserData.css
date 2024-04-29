@@ -1,0 +1,20 @@
+
+.custom-datepicker {
+    width: 12vw;
+    height: 5vh;
+  }
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 600px) {
+    .custom-datepicker {
+      width: 40vw !important;
+    }
+    .dateResponsive{
+        width: 70vw !important;
+    }
+    .textField{
+        width: 40vw !important
+    }
+  }
+  
+  

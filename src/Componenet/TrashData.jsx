@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Popover, IconButton, Typography, Pagination, TextField } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Popover, IconButton, Typography, Pagination, TextField, useMediaQuery } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import logo1 from "../image/logo1.png";
 import DownloadIcon from '@mui/icons-material/Download';
@@ -56,7 +56,7 @@ const TrashData = () => {
         redirect: 'follow',
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_all_user?user_id=${userId}`, requestOptions);
       const data = await response.json();
 
       const username = data?.data?.user_data?.[0]?.username;
@@ -96,7 +96,7 @@ const TrashData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_all_user?file_status=false`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_all_user?file_status=false`, requestOptions);
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -125,7 +125,7 @@ const TrashData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/get_user_files?user_id=${trash.user_id}&file_status=false`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/get_user_files?user_id=${trash.user_id}&file_status=false`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -147,7 +147,7 @@ const TrashData = () => {
         redirect: "follow"
       };
 
-      const response = await fetch(`http://139.59.58.53:2424/cardapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=recover`, requestOptions);
+      const response = await fetch(`http://134.209.153.179/cardapi/v1/delete_file?user_id=${selectedUser.user_id}&record_id=${record}&type=recover`, requestOptions);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -183,7 +183,8 @@ const TrashData = () => {
 
 
   const open = Boolean(anchorEl);
-
+  const isMobile = useMediaQuery('(max-width:600px)');
+  
   return (
     <div style={{  fontFamily: "'Inter var', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'" }}>
       <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
@@ -191,13 +192,15 @@ const TrashData = () => {
         <Link to ='/' style={{textDecoration:'none'}}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
             <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
-              <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
-              </Typography>
+            {!isMobile && (
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
+                  <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data </span>Mines
+                </Typography>
+              )}
             </div>
             </Link>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello,  {username.length > 5 ? username.slice(0, 5) + '...' : username}</Typography>
+            <Typography onClick={handleProfileClick} style={{ paddingRight: '10px' }}>Hello,  {username.length > 8 ? username.slice(0, 8) + '...' : username}</Typography>
             <img src={Avtar} style={{ height: '50px', width: '50px', backgroundColor: 'white', borderRadius: '50px' }} onClick={handleProfileClick} />
           </div>
         </Toolbar>

@@ -29,7 +29,7 @@ const ForgotPassword = () => {
             const formdata = new FormData();
             formdata.append("email", email);
             console.log("adsasdads",);
-            const response = await axios.post('http://139.59.58.53:2424/cardapi/v1/forgot_password', 
+            const response = await axios.post('http://134.209.153.179/cardapi/v1/forgot_password', 
                 formdata
             );
             console.log(response.data); 
