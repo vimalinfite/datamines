@@ -27,6 +27,7 @@ const SignUp = () => {
     const navigate = useNavigate();
     const defaultData = {
         email: '',
+        username:'',
         password: '',
         company_name: '',
         person_name: '',
@@ -72,7 +73,7 @@ const SignUp = () => {
         console.log("asdasd", e);
         // If OTP has not been sent yet, send OTP
 
-        if (!data.email || !data.password || !data.company_name || !data.person_name || !data.business_type || !data.city || !data.state || !data.country || !data.pincode || !phone) {
+        if (!data.email || !data.username || !data.password || !data.company_name || !data.business_type || !data.city || !data.state || !data.country || !data.pincode || !phone) {
             toast.error('All fields are required');
             return;
         }
@@ -102,6 +103,9 @@ const SignUp = () => {
         console.log("phoneeee", phone);
         formData.append("contact_no", phone)
         console.log("=-----------==========>", formData);
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ' - ' + pair[1]); 
+        }
         try {
             const response = await axios.post(`http://134.209.153.179/cardapi/v1/register?user_id=${localId}`, formData);
             console.log("=========  res data   ============> Registration successful:", response.data);
@@ -219,9 +223,9 @@ const SignUp = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField
-                                label="Person Name"
-                                name="person_name"
-                                value={data.person_name}
+                                label="User Name"
+                                name="username"
+                                value={data.username}
                                 onChange={handleChange}
                                 fullWidth
                                 variant="outlined"
