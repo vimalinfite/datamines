@@ -92,7 +92,7 @@ const Profile = () => {
         </Box>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh' }}>
-          <div className='ph' style={{ width: '10vw', maxheight: '100vh', backgroundColor: '#393BC5', alignItems: 'center', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div className='ph' style={{ width: '10vw', maxheight: '100vh', backgroundColor: '#393BC5', display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'hidden' }}>
             <Link to='/'>
               <img className='egg' id='ede' src={logo1} style={{ height: '10vh', width: '5vw', paddingTop: '10px', paddingBottom: '10px' }} />
             </Link>
