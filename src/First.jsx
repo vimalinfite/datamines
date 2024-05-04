@@ -28,11 +28,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import karzio from '../src/image/karzio.mp4'
+import karzio from '../src/image/krazio.mp4'
 import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
 import XIcon from '@mui/icons-material/X';
-
-
 
 function First(props) {
   const [selectedClass, setSelectedClass] = useState('');
@@ -79,6 +77,12 @@ function First(props) {
     phone: '',
     company_name: ''
   });
+  const [formData2, setFormData2] = useState({
+    username: '',
+    email: '',
+    phone: '',
+    company_name: ''
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,30 +91,87 @@ function First(props) {
       [name]: value
     });
   };
+  const handleChange2 = (e) => {
+    const { name, value } = e.target;
+    setFormData2({
+      ...formData2,
+      [name]: value
+    });
+  };
 
-  const submitdemo = () => {
+  const submitdemo2 = () => {
     // Check if any required field is empty
     if (!formData.username || !formData.email || !formData.phone) {
       toast.error('Please fill all required fields.');
       return; // Exit the function if any field is empty
     }
-  
+
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${TokenId}`);
-  
+
     const formdata = new FormData();
     formdata.append("username", formData.username);
     formdata.append("email", formData.email);
     formdata.append("phone", formData.phone);
     formdata.append("company_name", formData.company_name);
-  
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formdata,
       redirect: "follow"
     };
-  
+
+    fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        // Reset form data
+        setFormData2({
+          username: '',
+          email: '',
+          phone: '',
+          company_name: ''
+        });
+        return response.text();
+      })
+      .then((result) => {
+        if (result.includes("Email already exists...")) {
+          toast.warn('Email already exists...');
+        } else {
+          toast.success('Thank you for visiting. Our team will reach you soon.');
+          console.log("============== sent success ==============>", result);
+          handlePopoverClose()
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const submitdemo = () => {
+    // Check if any required field is empty
+    if (!formData.username || !formData.email || !formData.phone) {
+      toast.error('Please fill all required fields.');
+      return; // Exit the function if any field is empty
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${TokenId}`);
+
+    const formdata = new FormData();
+    formdata.append("username", formData.username);
+    formdata.append("email", formData.email);
+    formdata.append("phone", formData.phone);
+    formdata.append("company_name", formData.company_name);
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: formdata,
+      redirect: "follow"
+    };
+
     fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
@@ -131,13 +192,14 @@ function First(props) {
         } else {
           toast.success('Thank you for visiting. Our team will reach you soon.');
           console.log("============== sent success ==============>", result);
+          handlePopoverClose()
         }
       })
       .catch((error) => {
         console.error(error);
       });
   };
-  
+
 
   const classContent = {
     "How many cards can I upload at once ?": 'You can upload up to 50 cards in one go',
@@ -155,7 +217,9 @@ function First(props) {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
-  
+
+
+
 
   const open = Boolean(anchorEl);
   const id = open ? 'popover-demo' : undefined;
@@ -200,11 +264,11 @@ function First(props) {
 
   ];
 
-  
+
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex2((prevIndex) => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1));
+      setCurrentIndex2((prevIndex) => (prevIndex === testimonials.length - 3 ? 0 : prevIndex + 3));
     }, 4000); // Change slide duration as needed (e.g., every 2 seconds)
 
     return () => clearInterval(interval);
@@ -253,37 +317,41 @@ function First(props) {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar component="nav" style={{ background: 'white', color: "black", justifyContent: 'center' }}>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: 'flex', alignItems: "center" }}
-            >
-              {/* MUI */}
-              <Link to="/" style={{ textDecoration: 'none' }}>
-                <img className="egg" src={logo} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} alt="Logo" />
-              </Link>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', }}>
-                <span style={{ flexGrow: 1, color: '#000', fontWeight: 'bold', marginLeft: "10px" }}>Data</span> Mines
-              </Typography>
-            </Typography>
+          <Toolbar style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            {/* <Link to='/' style={{ textDecoration: 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center'}}>
+                <img src={logo} style={{height:'90px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px'}} />
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', marginLeft: '10px' }}>
+                  <span style={{ flexGrow: 1, color: '#000', marginLeft: '10px', fontWeight: 'bold' }}>Data</span> Mines
+                </Typography>
+              </div>
+            </Link> */}
+            <Link to='/' style={{ textDecoration: 'none' }} >
+              <div className='flex justify-center items-center' >
+                <img src={logo} alt="" className='h-[90px] m-2'/>
+                <p className='text-xl'>
+                  <span className='font-bold '>Data</span> Mines
+                </p>
+
+              </div>
+            </Link>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              sx={{ mr: 2, display: { md: 'none' } }}
+              
             >
               <MenuIcon />
             </IconButton>
             <Box className="main-header" >
               <div style={{ flexDirection: 'row', display: 'flex', gap: '20px', alignItems: "center" }}>
                 <Link className='pricing' to='/aboutus'>
-
-                  <Typography variant='h6' style={{ color: 'black', fontSize: '1rem' }} >About Us</Typography>
+                  <Typography variant='h6' style={{ color: 'black', fontSize: '14px' }} >About Us</Typography>
                 </Link>
                 <Link className='pricing' to='/pricing'>
-                  <Typography variant="h6" style={{ color: 'black', fontSize: '1rem' }}>Pricing</Typography>
+                  <Typography variant="h6" style={{ color: 'black', fontSize: '14px' }}>Pricing</Typography>
                 </Link>
               </div>
               <div style={{ display: 'flex', margin: '20px 0px', justifyContent: 'flex-end' }} >
@@ -300,6 +368,7 @@ function First(props) {
             </Box>
 
           </Toolbar>
+
         </AppBar>
         <ToastContainer />
         <nav>
@@ -313,7 +382,7 @@ function First(props) {
               keepMounted: true, // Better open performance on mobile.
             }}
             sx={{
-              display: { xs: 'flex', sm: 'none' },
+              display: { xs: 'flex', md: 'none' },
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
               justifyContent: "center"
             }}
@@ -322,7 +391,7 @@ function First(props) {
               <div className="mobile-menu-content">
                 <Close onClick={handleDrawerToggle} style={{ margin: '20px' }} />
 
-                <div class="drawer-links">
+                <div className="drawer-links">
                   <Link className='pricing' to='/aboutus'>
                     <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
                   </Link>
@@ -330,7 +399,7 @@ function First(props) {
                     <Typography variant="h6" style={{ color: 'black' }}>Pricing</Typography>
                   </Link>
                 </div>
-                <div class="drawer-btn">
+                <div className="drawer-btn">
                   <Link to='/SignIn'>
                     <Button style={{ fontFamily: 'Inter, sans-serif', marginBottom: "20px", width: '200px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }} >
                       Get Started Free
@@ -421,7 +490,7 @@ function First(props) {
         </Typography>
       </div>
       <div>
-        <Grid className='girdog' container justifyContent="center" spacing={4} style={{ textAlign: 'left', paddingLeft: '10px', paddingRight: '10px', height: isSmallScreen ? '750px' : '500px' }}>
+        <Grid className='girdog' container justifyContent="center" spacing={4} style={{ textAlign: 'left', paddingLeft: '10px', paddingRight: '10px', height: isSmallScreen ? '750px' : '' }}>
           <Grid item xs={12} md={5} style={{ display: 'flex', flexDirection: 'column' }}>
             <Grid container style={{ height: '100%', borderRadius: '10px', display: 'flex', flexDirection: 'column' }}>
               {/* Render dropdown text lines */}
@@ -438,7 +507,7 @@ function First(props) {
                     variant="body2"
                     style={{
                       fontSize: isSmallScreen ? '16px' : '20px',
-                      fontWeight: '400',
+                      fontWeight: '500',
                       lineHeight: isSmallScreen ? '24px' : '32px',
                       fontFamily: 'Inter, sans-serif',
                       display: 'flex',
@@ -485,24 +554,50 @@ function First(props) {
 
 
       <Grid item xs={12} style={{ marginTop: '40px', padding: '20px', textAlign: 'center', marginBottom: '20px' }}>
-        <div style={{ position: 'relative', width: '100%' }}>
-          <Grid container justifyContent="center" spacing={4} style={{ overflowX: 'hidden' }}>
-            {testimonials.slice(currentIndex2, currentIndex2 + 3).map((testimonial, index) => (
-              <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
-                <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" style={{ height: '100%', borderRadius: '10px', backgroundColor: 'white', position: 'relative', border: '1px solid #D3D3D3', padding: '22px' }}>
-                  <img src={logo} alt="Person" style={{ borderRadius: '50%', width: '80px', height: '80px', marginBottom: '15px' }} />
-                  <Typography variant="h6" style={{ marginBottom: '8px', fontFamily: 'Inter, sans-serif' }}>{testimonial.name}</Typography>
-                  <Typography variant="subtitle1" style={{ marginBottom: '8px', fontFamily: 'Inter, sans-serif' }}>{testimonial.company}</Typography>
-                  <Typography style={{ fontSize: '16px', textAlign: 'left', fontFamily: 'Inter, sans-serif' }} variant="body2">{testimonial.content}</Typography>
-                </Grid>
-              </Grid>
-            ))}
+  <div style={{ position: 'relative', width: '100%' }}>
+    <Grid container justifyContent="center" spacing={4} style={{ overflowX: 'hidden' }}>
+      {testimonials.slice(currentIndex2, currentIndex2 + 3).map((testimonial, index) => (
+        <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+          <Grid 
+            container 
+            direction="column" 
+            justifyContent="flex-start" 
+            alignItems="flex-start" 
+            style={{ 
+              height: '100%', 
+              borderRadius: '10px', 
+              backgroundColor: 'white', 
+              position: 'relative', 
+              border: '1px solid #393bc5', 
+              padding: '22px', 
+              transition: 'box-shadow 0.3s, border 0.3s',
+              boxShadow: '0px 0px 0px 0px rgba(0,0,0,0.2)', // Initial box-shadow
+            }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.boxShadow = '0px 0px 25px 0px rgba(0,0,0,0.2)'; // Box-shadow on hover
+              e.currentTarget.style.borderColor = '#393bc5'; // Border color on hover
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.boxShadow = '0px 0px 0px 0px rgba(0,0,0,0.1)'; // Remove box-shadow on mouse leave
+              e.currentTarget.style.borderColor = '#393bc5'; // Restore border color on mouse leave
+            }}
+          >
+            <img src={logo} alt="Person" style={{ borderRadius: '50%', width: '80px', height: '80px', marginBottom: '15px' }} />
+            <Typography variant="h6" style={{ marginBottom: '8px', fontFamily: 'Inter, sans-serif' }}>{testimonial.name}</Typography>
+            <Typography variant="subtitle1" style={{ marginBottom: '8px', fontFamily: 'Inter, sans-serif' }}>{testimonial.company}</Typography>
+            <Typography style={{ fontSize: '16px', textAlign: 'left', fontFamily: 'Inter, sans-serif' }} variant="body2">{testimonial.content}</Typography>
           </Grid>
-        </div>
-      </Grid>
+        </Grid>
+      ))}
+    </Grid>
+  </div>
+</Grid>
 
 
-      <div style={{ marginTop: '40px', padding: '20px', textAlign: 'center', marginBottom: '20px' }}>
+
+
+
+      <div style={{ marginTop: '40px',display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center', padding: '20px', textAlign: 'center', marginBottom: '20px' }}>
         <img src={badges1} style={{ height: '150px', gap: '20px' }} alt="" />
         <img src={badges2} style={{ height: '150px', gap: '20px' }} alt="" />
         <img src={badges3} style={{ height: '150px', gap: '20px' }} alt="" />
@@ -545,11 +640,11 @@ function First(props) {
                 <div style={{ textAlign: 'left' }}>
 
                   <Typography variant="h6" style={{ marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}></Typography>
-                  <TextField name="username" value={formData.username} onChange={handleChange} label="Your Work Email" fullWidth style={{ marginBottom: '10px' }} />
-                  <TextField name="email" value={formData.email} onChange={handleChange} label="Your Phone Number" fullWidth style={{ marginBottom: '10px' }} />
-                  <TextField name="phone" value={formData.phone} onChange={handleChange} label="How can we help you" fullWidth multiline rows={4} style={{ marginBottom: '10px' }} />
-                <ToastContainer />
-                  <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Submit a Query</Button>
+                  <TextField name="username" value={formData2.username} onChange={handleChange2} label="Your Work Email" fullWidth style={{ marginBottom: '10px' }} />
+                  <TextField name="email" value={formData2.email} onChange={handleChange2} label="Your Phone Number" fullWidth style={{ marginBottom: '10px' }} />
+                  <TextField name="phone" value={formData2.phone} onChange={handleChange2} label="How can we help you" fullWidth multiline rows={4} style={{ marginBottom: '10px' }} />
+                  <ToastContainer />
+                  <Button onClick={submitdemo2} variant="contained" style={{ backgroundColor: '#546fff', fontFamily: 'Inter, sans-serif' }}>Submit a Query</Button>
                 </div>
               </Grid>
               <div></div>
@@ -582,14 +677,14 @@ function First(props) {
             >
               <Close />
             </IconButton>
-            <div className='pop1' style={{ padding: '20px', width: '50vw', height: '70vh', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-              <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black' }}>
+            <div className='pop1' style={{ padding: '20px', width: '50vw',alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
+              <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black',fontSize:'1.4rem' }}>
                 Request A Demo
               </Typography>
-              <TextField name="username" label="Your Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
-              <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
-              <TextField name="phone" label="Your Phone Number" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
-              <TextField name="company_name" label="Company Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="username" label="Your Name" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="phone" label="Your Phone Number" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="company_name" label="Company Name" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
               <ToastContainer />
               <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', color: 'white', width: '60%', borderRadius: '5px', padding: '12px', fontFamily: 'Inter, sans-serif' }}>
                 Submit
@@ -618,7 +713,7 @@ function First(props) {
               </Typography>
             </div>
             <div style={{ display: 'flex' }}>
-              <Typography variant='body1' style={{ color: '#fff', fontSize: '14px' }}><a href='https://www.kraziocloud.com' style={{ color: '#fff', textDecoration: 'none' }}>
+              <Typography variant='body1' style={{ color: '#fff', fontSize: '13px' }}><a href='https://www.kraziocloud.com' style={{ color: '#fff', textDecoration: 'none' }}>
                 A Product of Krazio Cloud Pvt. Ltd. (Proudly Made in </a></Typography>
               <img src={flag} style={{ height: '23px', width: '23px', marginRight: '5px', marginLeft: '5px' }} />
               <Typography variant='body1' style={{ color: '#fff' }}> )</Typography>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import wait from './image/karzio.mp4'
+import wait from './image/krazio.mp4'
 import { useEffect, useState } from 'react';
 import avtar from './image/Avtar.png';
 import { useDropzone } from 'react-dropzone';
@@ -23,8 +23,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import jsPDF from 'jspdf';
 import flag from './image/flag.png'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
 import CircularProgressBar from './Componenet/CircularProgressBar';
+
 
 const DeselectConfirmationDialog = ({ open, onClose, onConfirm }) => {
   return (
@@ -579,7 +581,7 @@ const PerformOCR = () => {
         </Toolbar>
       </AppBar>
       <br />
-      <br />
+      
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingLeft:5,paddingRight:5}}>
         <Link to="/dashboard">
           <ArrowBackIcon style={{ margin: '10px', color: '#393BC5' }} />
@@ -618,7 +620,7 @@ const PerformOCR = () => {
             <>
               <span style={{ fontFamily: "arial" }}>{`${MAX_IMAGE_UPLOADS - remainingImageCount} Out Of ${MAX_IMAGE_UPLOADS} Images Uploaded`}</span>
               <div style={{ marginTop: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Button
+               {uploadedFiles.length == 0 ?'' : (<> <Button
                   variant="contained"
                   style={{ backgroundColor: "#393bc5", color: 'white', marginRight: '10px' }}
                   onClick={handleSelectAll}
@@ -641,7 +643,7 @@ const PerformOCR = () => {
                   open={deleteDialogOpen}
                   onClose={handleCloseDeleteDialog}
                   onConfirm={handleConfirmDeleteAll}
-                />
+                /></>)}
               </div>
             </>
           ) : (
@@ -675,6 +677,7 @@ const PerformOCR = () => {
               ))}
             </div>
           )}
+          
           <CheckboxDeselectConfirmationDialog
             open={deselectDialogOpen2}
             onClose={() => setDeselectDialogOpen2(false)}
@@ -688,7 +691,7 @@ const PerformOCR = () => {
 
         </div>
 
-
+          <br />
 
         <div style={{ marginTop: '10vh', marginBottom: '10px', textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
           {isLoading && (
@@ -699,12 +702,14 @@ const PerformOCR = () => {
               </video>
             </div>
           )}
+          {uploadedFiles.length == 0 ? '':(
+            <>
           {!isLoading && (
             <Button variant="contained" style={{ backgroundColor: "#393bc5", color: 'white', marginBottom: '5vh' }} onMouseEnter={handleHover}
               onMouseLeave={handleLeave} onClick={fetchData} disabled={uploadedFiles.length === 0}>
               Fetch Data
             </Button>
-          )}
+          )}</>)}
           <div>
             {isLoading && (
               <div style={{ marginBottom: '10vh' }}>
@@ -801,8 +806,8 @@ const PerformOCR = () => {
               <a href="https://www.facebook.com/kraziocloud?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
             </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-              <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
-            </Typography>
+                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
+              </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
               <a href="https://instagram.com/krazio_cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>
             </Typography>

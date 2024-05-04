@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -23,12 +23,9 @@ import axios from 'axios';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from './firebase.config';
 
-
-
 const SignUp = () => {
     const navigate = useNavigate();
     const defaultData = {
-        username: '',
         email: '',
         password: '',
         company_name: '',
@@ -44,13 +41,20 @@ const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [phone, setPhone] = useState('');
     const [captchaVerified, setCaptchaVerified] = useState(false);
-
+    const [otpSent, setOtpSent] = useState(false);
+    const [verifyDone,setVerifyDone] = useState(false)
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [user, setUser] = useState("")
+    const [otp1, setOtp1] = useState("")
+    const [buttonClick,setButtonClick]=useState(false)
+    const [buttonClick2,setButtonClick2]=useState(false)
     const handleCaptchaVerification = () => {
         // Perform CAPTCHA verification
         // If verification is successful, set captchaVerified to true
         setCaptchaVerified(true);
         console.log("Asdasdasd");
     }
+
     const handleChange = (e) => {
         if (e.target.name === 'email') {
             setData({ ...data, [e.target.name]: e.target.value.toLowerCase() });
@@ -64,13 +68,11 @@ const SignUp = () => {
     };
 
     const handleSignUp = async (e) => {
-
-
         e.preventDefault();
         console.log("asdasd", e);
         // If OTP has not been sent yet, send OTP
 
-        if (!data.username || !data.email || !data.password || !data.company_name || !data.person_name || !data.business_type || !data.city || !data.state || !data.country || !data.pincode || !phone) {
+        if (!data.email || !data.password || !data.company_name || !data.person_name || !data.business_type || !data.city || !data.state || !data.country || !data.pincode || !phone) {
             toast.error('All fields are required');
             return;
         }
@@ -119,35 +121,11 @@ const SignUp = () => {
         }
     }
 
-
-    const [user, setUser] = useState("")
-    const [otp1, setOtp1] = useState("")
-    const [otpSent, setOtpSent] = useState(false);
-    const [otpVerified, setOtpVerified] = useState(false);
-
-    const [confirmationResult, setConfirmationResult] = useState(null);
-
-    // useEffect(() => {
-    //     if (otpSent && !otpVerified) {
-    //         initializeRecaptcha();
-    //     }
-    // }, [otpSent, otpVerified]);
-
-    // const initializeRecaptcha = () => {
-    //     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-    //         "recaptcha-container",
-    //         {
-    //             size: "invisible",
-
-    //         }
-    //     );
-    // }
-
-
     const sendOtp = async (e) => {
         e.preventDefault();
 
         try {
+        setButtonClick(true)
             const recaptcha = new RecaptchaVerifier(auth, "recaptcha", {
                 'size': 'invisible',
             });
@@ -159,40 +137,27 @@ const SignUp = () => {
             toast.success('OTP sent successfully');
             handleCaptchaVerification();
 
-            // Attempt auto-verification
-
         } catch (err) {
             console.log("asdasd", err);
             toast.error('Failed to send OTP. Please try again.');
         }
     };
 
-
-    // const sendOtp = async (e) => {
-    //     e.preventDefault();
-
-    //     try {
-    //         const confirmation = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
-    //         setConfirmationResult(confirmation);
-    //         setOtpSent(true);
-    //         toast.success('OTP sent successfully');
-    //     } catch (err) {
-    //         console.error(err);
-    //         toast.error('Failed to send OTP. Please try again.');
-    //     }
-    // };
     const verifyOtp = async (e) => {
 
-
-
         e.preventDefault();
+        setButtonClick2(true)
+
+
         try {
+            
             const dataaa = await user.confirm(otp1);
             if (dataaa && dataaa.user && dataaa.user.uid) {
                 setLocalId(dataaa.user.uid);
                 localStorage.setItem("uid", JSON.stringify(dataaa.user.uid));
                 setOtpVerified(true);
                 toast.success('OTP is verified')
+                setVerifyDone(true)
             } else {
                 toast.error('OTP is invalid');
             }
@@ -202,22 +167,21 @@ const SignUp = () => {
         }
     }
 
-
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',flexDirection:'column' }}>
-            <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+           <AppBar position='relative' style={{ backgroundColor: '#393bc5', boxShadow: 'none' }}>
                 <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, paddingRight: 10 }}>
+                    <Link to ='/' style={{textDecoration:'none'}}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Link to = '/'>
                         <img className='egg' src={logo1} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} />
-                        </Link>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white', marginLeft: '10px' }}>
                             <span style={{ flexGrow: 1, color: 'white', marginLeft: '10px', fontWeight: 'bold' }}>Data</span> Mines
                         </Typography>
                     </div>
+                    </Link>
                 </Toolbar>
             </AppBar>
-            
+
             <ToastContainer />
             <Paper style={{ boxShadow: 'none' }} elevation={3} sx={{
                 padding: {
@@ -231,7 +195,7 @@ const SignUp = () => {
                 borderRadius: '10px',
                 margin: '15px'
             }}>
-                
+
                 <Typography variant="h4" align="center" gutterBottom>
                     Sign Up
                 </Typography>
@@ -263,16 +227,7 @@ const SignUp = () => {
                                 variant="outlined"
                             />
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                label="User Name"
-                                name="username"
-                                value={data.username}
-                                onChange={handleChange}
-                                fullWidth
-                                variant="outlined"
-                            />
-                        </Grid>
+
                         <Grid item xs={12} md={6}>
                             <TextField
                                 select
@@ -309,6 +264,9 @@ const SignUp = () => {
                                 <MenuItem value="defence">Defence</MenuItem>
 
                             </TextField>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+
                         </Grid>
                         {/* Second group */}
                         <Grid item xs={12}>
@@ -401,18 +359,21 @@ const SignUp = () => {
                                 containerStyle={{ marginBottom: '16px' }}
                             />
                             <Grid item md={3} xs={5}>
-
-
                                 <div style={{ marginBottom: '10px' }} id='recaptcha'></div>
-
                                 <Grid container>
                                     <Grid item xs={12}>
+                                        {!otpSent && (
+                                            <Button type="submit" variant="contained" disabled={buttonClick} style={{ backgroundColor: '#393bc5', borderRadius: '50px' }} fullWidth>
+                                                Send Otp
+                                            </Button>
+                                        )}
                                         {otpSent && (
                                             <>
-                                                <TextField onChange={(e) => setOtp1(e.target.value)} variant='outlined' label='Enter OTP' />
-
-                                                <Button type='button' variant="contained" style={{ marginTop: '10px', marginBottom: '10px', backgroundColor: '#393bc5', color: 'white', borderRadius: '50px', width: '100%' }} onClick={verifyOtp}>Verify OTP</Button>
-
+                                                <TextField onChange={(e) => setOtp1(e.target.value)} variant='outlined' label='Enter OTP' fullWidth />
+                                                {!verifyDone && (
+                                                <Button type='button' variant="contained" disabled={buttonClick2} style={{ marginTop: '10px', marginBottom: '10px', backgroundColor: '#393bc5', color: 'white', borderRadius: '50px', width: '100%' }} onClick={verifyOtp}>
+                                                    Verify OTP
+                                                </Button>)}
                                             </>
                                         )}
                                     </Grid>

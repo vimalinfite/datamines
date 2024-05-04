@@ -221,7 +221,7 @@ const Dashboard = () => {
                         objectFit: 'contain',
                         paddingBottom: '10px'
                       }} />
-                      <MdDelete size={"20px"} onClick={() => handleDelete(folder.record_id)} style={{ position: 'absolute', top: 1, right: 1 }} />
+                      <MdDelete size={"20px"} onClick={() => handleDelete(folder.record_id)} style={{ position: 'absolute', top: 1, right: 1,color:'#393bc5' }} />
                       <div style={{
                         padding: '4px',
                         display: 'flex',

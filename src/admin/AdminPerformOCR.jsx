@@ -1,5 +1,5 @@
 import axios from 'axios';
-import wait from '../image/karzio.mp4'
+import wait from '../image/krazio.mp4'
 import { useEffect, useState } from 'react';
 import avtar from '../image/Avtar.png';
 import { useDropzone } from 'react-dropzone';
@@ -22,7 +22,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import jsPDF from 'jspdf';
 import flag from '../image/flag.png'
-import { Facebook, Twitter, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
+import XIcon from '@mui/icons-material/X';
 import CircularProgressBar from '../Componenet/CircularProgressBar';
 
 const DeselectConfirmationDialog = ({ open, onClose, onConfirm }) => {
@@ -151,7 +152,7 @@ const AdminPerformOCR = () => {
       // Both pdfUrl and csvurl are set, you can perform your action here
       storeFile(pdfUrl, csvurl);
     }
-  }, [csvurl]);
+  }, [csvurl,pdfUrl]);
   useEffect(() => {
     fetchUser()
   }, []);
@@ -182,54 +183,49 @@ const AdminPerformOCR = () => {
   };
   const convertToPDF = (data, type) => {
     const pdf = new jsPDF();
-
-    // Set up list headers
-    pdf.text('Important Files:', 10, 10);
-
-    let y = 20; // Start position for items
-
+    
+    let y = 10; // Start position for items
+    let currentPage = 1;
+    const maxPageHeight = 250; // Adjust as needed
+  
     data.forEach((dataItems) => {
       dataItems.forEach((item) => {
         const markedAsImportant = importantFiles.has(item.file) ? 'Yes' : 'No';
         const listItem = `Important: ${markedAsImportant}\n`;
-        pdf.text(listItem, 10, y);
-
         const companyNames = `  Company Names: ${item.company_names.join(', ')}\n`;
-        pdf.text(companyNames, 10, y + 10);
-
         const contactNumbers = `  Contact Numbers: ${item.contact_numbers.join(', ')}\n`;
-        pdf.text(contactNumbers, 10, y + 20);
-
         const designations = `  Designations: ${item.designations.join(', ')}\n`;
-        pdf.text(designations, 10, y + 30);
-
         const emailAddresses = `  Email Addresses: ${item.email_addresses.join(', ')}\n`;
-        pdf.text(emailAddresses, 10, y + 40);
-
         const locations = `  Locations: ${item.locations}\n`;
-        pdf.text(locations, 10, y + 50);
-
         const personNames = `  Person Names: ${item.person_names.join(', ')}\n`;
-        pdf.text(personNames, 10, y + 60);
-
         const services = `  Services: ${item.services.join(', ')}\n`;
-        pdf.text(services, 10, y + 70);
-
         const websiteURLs = `  Website URLs: ${item.website_urls.join(', ')}\n`;
-        pdf.text(websiteURLs, 10, y + 80);
-
-        y += 100; // Move to next item
+  
+        const contentArray = [listItem, companyNames, contactNumbers, designations, emailAddresses, locations, personNames, services, websiteURLs];
+        const contentHeight = contentArray.length * 10;
+  
+        // Check if content exceeds the page height
+        if (y + contentHeight > maxPageHeight) {
+          pdf.addPage(); // Add new page
+          currentPage++; // Increment page count
+          y = 10; // Reset y position
+        }
+  
+        // Add content to the PDF
+        contentArray.forEach((content, index) => {
+          pdf.text(content, 10, y + index * 10);
+        });
+  
+        y += contentHeight + 10; // Move to next item
       });
     });
-
-    console.log("asdasd", type == "download");
+  
     if (type == "download") {
       // Save PDF
       pdf.save(`${downloadFileName}.pdf`)
     } else {
-
       const pdfBlob = pdf.output('blob');
-      const storageRef = ref(storage, `files/${downloadFileName}.pdf `);// Also update the file name for Firebase storage
+      const storageRef = ref(storage, `files/${downloadFileName}.pdf`); // Also update the file name for Firebase storage
       const uploadTask = uploadBytesResumable(storageRef, pdfBlob);
       uploadTask.on('state_changed',
         (snapshot) => {
@@ -243,7 +239,7 @@ const AdminPerformOCR = () => {
         () => {
           // Upload complete
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("dddddddd", downloadURL);
+            console.log("Download URL:", downloadURL);
             setpdfUrl(downloadURL);
           });
           console.log('Pdf File uploaded successfully!');
@@ -251,7 +247,6 @@ const AdminPerformOCR = () => {
       );
     }
   };
-
   const handleConfirmDeselect = () => {
     // Perform deselect action here
     const updatedFiles = uploadedFiles.map(file =>
@@ -575,7 +570,7 @@ const AdminPerformOCR = () => {
         </Toolbar>
       </AppBar>
       <br />
-      <br />
+
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingLeft:5,paddingRight:5}}>
         <Link to="/admindashboard">
           <ArrowBackIcon style={{ margin: '10px', color: '#393BC5' }} />
@@ -614,7 +609,7 @@ const AdminPerformOCR = () => {
             <>
               <span style={{ fontFamily: "arial" }}>{`${MAX_IMAGE_UPLOADS - remainingImageCount} Out Of ${MAX_IMAGE_UPLOADS} Images Uploaded`}</span>
               <div style={{ marginTop: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Button
+               {uploadedFiles.length == 0 ?'' : (<> <Button
                   variant="contained"
                   style={{ backgroundColor: "#393bc5", color: 'white', marginRight: '10px' }}
                   onClick={handleSelectAll}
@@ -637,7 +632,7 @@ const AdminPerformOCR = () => {
                   open={deleteDialogOpen}
                   onClose={handleCloseDeleteDialog}
                   onConfirm={handleConfirmDeleteAll}
-                />
+                /></>)}
               </div>
             </>
           ) : (
@@ -684,7 +679,7 @@ const AdminPerformOCR = () => {
 
         </div>
 
-
+          <br />
 
         <div style={{ marginTop: '10vh', marginBottom: '10px', textAlign: 'center', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
           {isLoading && (
@@ -695,17 +690,19 @@ const AdminPerformOCR = () => {
               </video>
             </div>
           )}
+          {uploadedFiles.length == 0 ? '':(
+            <>
           {!isLoading && (
             <Button variant="contained" style={{ backgroundColor: "#393bc5", color: 'white', marginBottom: '5vh' }} onMouseEnter={handleHover}
               onMouseLeave={handleLeave} onClick={fetchData} disabled={uploadedFiles.length === 0}>
               Fetch Data
             </Button>
-          )}
+          )}</>)}
           <div>
             {isLoading && (
               <div style={{ marginBottom: '10vh' }}>
                 <p style={{ color: 'red', fontSize: '2rem', fontFamily: 'Inter, sans-serif', marginTop: '20px' }}>Do not refresh the page (it may take long time)</p>
-                <p style={{ color: 'black', fontSize: '1.3rem', fontFamily: 'Inter, sans-serif' }}>Watch a award-winning film while we work on your results. Thanks for being patience.</p>
+                {/* <p style={{ color: 'black', fontSize: '1.3rem', fontFamily: 'Inter, sans-serif' }}>Watch a award-winning film while we work on your results. Thanks for being patience.</p> */}
               </div>
             )}
           </div>
@@ -797,8 +794,8 @@ const AdminPerformOCR = () => {
               <a href="https://www.facebook.com/kraziocloud?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Facebook /></a>
             </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
-              <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Twitter /></a>
-            </Typography>
+                <a href="https://twitter.com/KrazioCloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><XIcon /></a>
+              </Typography>
             <Typography variant='body1' style={{ color: '#fff', fontSize: '14px', marginRight: '10px' }}>
               <a href="https://instagram.com/krazio_cloud" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'none' }}><Instagram /></a>
             </Typography>

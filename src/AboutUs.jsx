@@ -26,7 +26,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import karzio from '../src/image/karzio.mp4'
 import { Facebook, Instagram, LinkedIn, Language } from '@mui/icons-material'
 import XIcon from '@mui/icons-material/X';
 
@@ -115,7 +114,7 @@ const AboutUs = (props) => {
       body: formdata,
       redirect: "follow"
     };
-
+  
     fetch("http://134.209.153.179/cardapi/v1/data_store", requestOptions)
       .then((response) => {
         if (!response.ok) {
@@ -187,43 +186,38 @@ const AboutUs = (props) => {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar component="nav" style={{ background: 'white', color: "black", justifyContent: 'center' }}>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: 'flex', alignItems: "center" }}
-            >
-              {/* MUI */}
-              <Link to="/" style={{ textDecoration: 'none' }}>
-                <img className="egg" src={logo} style={{ height: '70px', paddingLeft: '10px', paddingTop: '10px', paddingBottom: '10px' }} alt="Logo" />
-              </Link>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000', }}>
-                <span style={{ flexGrow: 1, color: '#000', fontWeight: 'bold', marginLeft: "10px" }}>Data</span> Mines
-              </Typography>
-            </Typography>
+          <Toolbar style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <Link to='/' style={{ textDecoration: 'none' }} >
+              <div className='flex justify-center items-center' >
+                <img src={logo} alt="" className='h-[90px] m-2'/>
+                <p className='text-xl'>
+                  <span className='font-bold '>Data</span> Mines
+                </p>
+
+              </div>
+            </Link>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              sx={{ mr: 2, display: { md: 'none' } }}
             >
               <MenuIcon />
             </IconButton>
             <Box className="main-header" >
-              <div style={{ flexDirection: 'row', display: 'flex',gap:'20px', alignItems: "center" }}>
+              <div style={{ flexDirection: 'row', display: 'flex', gap: '20px', alignItems: "center" }}>
                 <Link className='pricing' to='/aboutus'>
-
-                <Typography variant='h6' style={{ color: 'black', fontSize: '1rem' }} >About Us</Typography>
+                  <Typography variant='h6' style={{ color: 'black', fontSize: '14px' }} >About Us</Typography>
                 </Link>
                 <Link className='pricing' to='/pricing'>
-                  <Typography variant="h6" style={{ color: 'black', fontSize: '1rem' }}>Pricing</Typography>
+                  <Typography variant="h6" style={{ color: 'black', fontSize: '14px' }}>Pricing</Typography>
                 </Link>
               </div>
               <div style={{ display: 'flex', margin: '20px 0px', justifyContent: 'flex-end' }} >
                 <Link to='/SignIn'>
 
-                <Button className='getstarted-btn'>
+                  <Button className='getstarted-btn'>
                     Get Started Free
                   </Button>
                 </Link>
@@ -247,35 +241,35 @@ const AboutUs = (props) => {
               keepMounted: true, // Better open performance on mobile.
             }}
             sx={{
-              display: { xs: 'flex', sm: 'none' },
+              display: { xs: 'flex', md: 'none' },
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
               justifyContent: "center"
             }}
           >
-             {mobileOpen && (
-          <div className="mobile-menu-content">
-            <Close onClick={handleDrawerToggle} style={{margin: '20px'}}/>
+            {mobileOpen && (
+              <div className="mobile-menu-content">
+                <Close onClick={handleDrawerToggle} style={{ margin: '20px' }} />
 
-             <div class="drawer-links">
-              <Link className='pricing' to='/aboutus'>
-                <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
-              </Link>
-              <Link className='pricing' to='/pricing'>
-                <Typography variant="h6" style={{ color: 'black' }}>Pricing</Typography>
-              </Link>
-            </div>
-            <div class="drawer-btn">
-              <Link to='/SignIn'>
-                <Button style={{ fontFamily: 'Inter, sans-serif', marginBottom: "20px", width: '200px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }} >
-                  Get Started Free
-                </Button>
-              </Link>
-              <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
-                Request A Demo
-              </Button>
-            </div>
-          </div>
-        )}
+                <div class="drawer-links">
+                  <Link className='pricing' to='/aboutus'>
+                    <Typography variant='h6' style={{ color: 'black', paddingRight: '10px' }} >About Us</Typography>
+                  </Link>
+                  <Link className='pricing' to='/pricing'>
+                    <Typography variant="h6" style={{ color: 'black' }}>Pricing</Typography>
+                  </Link>
+                </div>
+                <div class="drawer-btn">
+                  <Link to='/SignIn'>
+                    <Button style={{ fontFamily: 'Inter, sans-serif', marginBottom: "20px", width: '200px' }} sx={{ color: '#546fff', border: '1px solid #546fff' }} >
+                      Get Started Free
+                    </Button>
+                  </Link>
+                  <Button onClick={handlePopoverOpen} style={{ fontFamily: 'Inter, sans-serif', padding: '10px', backgroundColor: '#546fff' }} sx={{ color: 'white' }}>
+                    Request A Demo
+                  </Button>
+                </div>
+              </div>
+            )}
             {/* </Box> */}
           </Drawer>
         </nav>
@@ -290,7 +284,7 @@ const AboutUs = (props) => {
   </div>
 </div>
 
-      <div style={{ marginTop: '40px', padding: '20px', textAlign: 'center' }}>
+<div style={{ marginTop: '40px',display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center', padding: '20px', textAlign: 'center', marginBottom: '20px' }}>
         <img src={badges1} style={{ height: '150px', gap: '20px' }} alt="" />
         <img src={badges2} style={{ height: '150px', gap: '20px' }} alt="" />
         <img src={badges3} style={{ height: '150px', gap: '20px' }} alt="" />
@@ -344,14 +338,14 @@ const AboutUs = (props) => {
             >
               <Close />
             </IconButton>
-            <div className='pop1' style={{ padding: '20px', width: '50vw', height: '70vh', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
+            <div className='pop1' style={{ padding: '20px', width: '50vw', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
               <Typography variant="h4" gutterBottom style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', color: 'black' }}>
                 Request A Demo
               </Typography>
-              <TextField name="username" label="Your Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
-              <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
-              <TextField name="phone" label="Your Phone Number" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
-              <TextField name="company_name" label="Company Name" onChange={handleChange} style={{ marginBottom: '20px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="username" label="Your Name" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="email" label="Your Email" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="phone" label="Your Phone Number" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
+              <TextField name="company_name" label="Company Name" onChange={handleChange} style={{ marginBottom: '10px', width: '60%', borderRadius: '5px' }} />
               <ToastContainer/>
               <Button onClick={submitdemo} variant="contained" style={{ backgroundColor: '#546fff', color: 'white', width: '60%', borderRadius: '5px', padding: '12px', fontFamily: 'Inter, sans-serif' }}>
                 Submit
@@ -379,7 +373,7 @@ const AboutUs = (props) => {
               </Typography>
             </div>
             <div style={{ display: 'flex' }}>
-              <Typography variant='body1' style={{ color: '#fff', fontSize: '14px' }}><a href='https://www.kraziocloud.com' style={{ color: '#fff', textDecoration: 'none' }}>
+              <Typography variant='body1' style={{ color: '#fff', fontSize: '13px' }}><a href='https://www.kraziocloud.com' style={{ color: '#fff', textDecoration: 'none' }}>
                 A Product of Krazio Cloud Pvt. Ltd. (Proudly Made in </a></Typography>
               <img src={flag} style={{ height: '23px', width: '23px', marginRight: '5px', marginLeft: '5px' }} />
               <Typography variant='body1' style={{ color: '#fff' }}> )</Typography>

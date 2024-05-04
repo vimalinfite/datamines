@@ -77,11 +77,11 @@ const Profile = () => {
     { letter: 'a', },
     { letter: 't', },
     { letter: 'a', },
-    { letter: 'M', },
-    { letter: 'i', },
-    { letter: 'n', },
-    { letter: 'e', },
-    { letter: 's', },
+    { letter: 'C', },
+    { letter: 'r', },
+    { letter: 'a', },
+    { letter: 'f', },
+    { letter: 't', },
   ];
 
   return (
